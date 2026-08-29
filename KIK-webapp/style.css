@@ -1,0 +1,50 @@
+* {
+    font-family: arial;
+}
+
+body {
+    background: linear-gradient(270deg, #0000FF, #7878FF);
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+#greeting {
+    color: white;
+    text-shadow: #000;
+    font-size: 100px;
+    height: 200px;
+}
+
+#continue_btn #button_continue {
+    border: none;
+    background: #211758;
+    padding: 24px 44px 24px 44px; /*formatnya atas kanan bwh kiri*/
+    color: white;
+    border-radius: 55px;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 0 4px 8px #000; /*formatnya x bawah kanan*/
+    transform: scale(1);
+    transition: transform 0.5s ease;
+}
+
+#continue_btn p{
+    color: white;
+    font-size: 12px;
+    text-align: center;
+    gap: 0;
+}
+
+#continue_btn #button_continue:hover {
+    transform: scale(1.1);
+}
+
+#continue_btn p:hover {
+    text-decoration: underline;
+    text-decoration-color: yellow;
+}

@@ -1,0 +1,59 @@
+const bar_btn = document.getElementById("bar_icon_btn");
+
+bar_btn.addEventListener("click", (e) => {
+    e.preventDefault();
+    
+    right_nav_sheet.showModal();
+});
+
+const right_nav_sheet = document.getElementById("right_nav_sheet");
+const wrapper_section = document.querySelector(".right_sheet_container");
+
+right_nav_sheet.addEventListener("click", () => {
+    right_nav_sheet.close();
+});
+
+wrapper_section.addEventListener("click", (e)=> {
+    e.stopPropagation()
+});
+
+const absent_btn = document.getElementById("absent_feature");
+absent_btn.addEventListener("click", (e) => {
+    e.preventDefault()
+
+    const bottom_sheet = document.getElementById("bottom_sheet");
+    bottom_sheet.showModal();
+    right_nav_sheet.close();
+});
+
+const submit_btn = document.getElementById("submit_absent");
+submit_btn.addEventListener("click", (ev) => {
+    ev.preventDefault()
+
+    const data_status = document.querySelector("input[name=status]:checked")?.value;
+    const comment = document.getElementById("comment_status").value;
+
+    navigator.geolocation.getCurrentPosition(
+        async (position) => {
+            const user_latitude = position.coords.latitude;
+            const user_longitude = position.coords.longitude;
+            console.log(user_latitude);
+            console.log(user_longitude);
+            try {
+                const data = await api_requests("/absent", "POST", {data_status, comment, user_latitude, user_longitude});
+                if (data.success) {
+                    // popup_absent.showModal()
+                    alert("your attendance logged");
+                } else {
+                    alert(data.message);
+                }
+            } catch (error) {
+                alert(error.message)
+            }
+            
+        }, (error) => {
+            console.log("we cant get your current position", error.message);
+        }
+    );
+
+    });

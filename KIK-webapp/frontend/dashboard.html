@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DASHBOARD</title>
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+    <div id="main_container">
+        <nav id="top_navigation_bar">
+            <img src="assets/img/profile-contoh.jpeg" id="profile_pict">
+            <div id="search_box">
+                <img src="assets/icon/magnifying-glass-solid.png" alt="search_btn" class="search_btn">
+                <input type="search" placeholder="search something" id="search_bar">
+            </div>
+            <img src="assets/icon/bars-solid.png" id="bar_icon_btn" alt="bars-solid">
+        </nav>
+        
+        <div id="main_section">
+            <main id="main_content">
+                <img src="assets/img/profile-contoh.jpeg" id="profile_picture">
+                <p>Xenozone<span>| XI TKJ</span></p>
+            </main>
+        </div>
+    </div>
+
+    <dialog id="right_nav_sheet">
+        <nav>
+            <div class="right_sheet_container">
+                <div class="section_wrapper_1">
+                    <div class="pembatas">
+                        <p>General</p>
+                        <hr>
+                    </div>
+                    <div class="items">
+                        <img src="assets/icon/gear-solid.png" class="items_img">
+                        <span>settings</span>
+                    </div>
+                    
+                    <div class="items">
+                        <img src="assets/icon/dice-solid.png" class="items_img">
+                        <span>about</span>
+                    </div>
+                    
+                    <div class="items">
+                        <img src="assets/icon/backward-solid.png" class="items_img">
+                        <span>log out</span>
+                    </div>
+                </div>
+                <div class="section_wrapper_2">
+                    <div class="pembatas">
+                        <p>Featured</p>
+                        <hr>
+                    </div>
+                    <div class="items" id="absent_feature">
+                        <img src="assets/icon/school-solid.png" class="items_img">
+                        <span>Absent</span>
+                    </div>
+                    
+                    <div class="items">
+                        <img src="assets/icon/star-regular.png" class="items_img">
+                        <span>Schedule</span>
+                    </div>
+                    
+                    <div class="items">
+                        <img src="assets/icon/note-sticky-solid.png" class="items_img">
+                        <span>Note</span>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </dialog>
+
+    <dialog id="bottom_sheet">
+        <form>
+            <div id="absent_container">
+                <img id="illustration_geofencing">
+                <div class="status_absent_wrapper">
+                    <div class="status_items">
+                        <input type="radio" id="hadir" name="status" value="hadir">
+                        <label for="hadir">Hadir</label>
+                    </div>
+        
+                    <div class="status_items">
+                        <input type="radio" id="sakit" name="status" value="sakit">
+                        <label for="sakit">sakit</label>
+                    </div>
+        
+                    <div class="status_items">
+                        <input type="radio" id="izin" name="status" value="izin">
+                        <label for="izin">izin</label>
+                    </div>
+        
+                    <div class="status_items">
+                        <input type="radio" id="dispen" name="status" value="dispen">
+                        <label for="dispen">dispen</label>
+                    </div>
+        
+                    <div class="status_items">
+                        <input type="radio" id="pulang" name="status" value="pulang">
+                        <label for="pulang">pulang</label>
+                    </div>
+                </div>
+
+                <div class="comments_container">
+                    <label for="comment_status">Comment</label>
+                    <textarea class="custom_text_input" id="comment_status" placeholder="input your reason/comment"></textarea>
+                </div>
+    
+            </div>
+            <div id="submit_btn_wrapper">
+                <input type="submit" id="submit_absent">
+            </div>
+        </form>
+    </dialog>
+    <script src="js/api.js"></script>
+    <script src="js\dashboard.js"></script>
+</body>
+</html>
