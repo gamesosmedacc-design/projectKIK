@@ -7,35 +7,42 @@
     <link rel="stylesheet" href="css/login.css">
 </head>
 <body>
-    <!-- <form id="login_box">
+    <form id="login_box">
+        <img src="assets/img/images-removebg-preview.png" class="logo">
         <p class="start_text"><strong>Login</strong></p>
         <input type="text" id="username" placeholder="username / nis">
-        <div class="password_box">
+        <div id="password_box">
+            <input type="password" id="password" class="input_password" placeholder="password">
             <img class="solid_eye" src="assets/icon/eye-solid.png">
             <img class="slash_eye" src="assets/icon/eye-slash-solid.png">
-            <input type="password" id="password" class="input_password" placeholder="password">
         </div>
-        <p>Pakai <a id="nis_link">NIS</a> <a id="username_link">Username</a></p>
+        <p class="link">Belum punya akun? <a id="register_link">Register</a></p>
         <button class="sign_in_btn"><b>Sign in</b></button>
-    </form> -->
-
+    </form>
+    
     <form id="register_box">
+        <img src="assets/img/images-removebg-preview.png" class="logo">
         <p class="start_text"><strong>Register sekarang!</strong></p>
         <input type="text" id="create_username" placeholder="Buat username">
-        <div class="password_box">
+        <div id="password_box">
             <img class="solid_eye" src="assets/icon/eye-solid.png">
             <img class="slash_eye" src="assets/icon/eye-slash-solid.png">
-            <input type="password" id="password" class="input_password" placeholder="Buat password">
+            <input type="password" id="create_password" class="input_password" placeholder="Buat password">
         </div>
+        <p class="note"><strong>Note : Password harus memiliki kombinasi huruf dan angka!</strong></p>
         <input type="text" id="create_nis" placeholder="Nis">
         <input type="text" id="class_" placeholder="Kelas">
         <input type="text" id="email" placeholder="Email">
         <input type="text" id="number" placeholder="Nomor Handphone">
-        <select>
+        <select id="role">
             <option value="teacher">Guru</option>
             <option value="student">Murid</option>
         </select>
+        <p class="link">Sudah punya akun? <a id="login_link">Login</a></p>
+        <button class="sign_in_btn"><b>Sign in</b></button>
+    </form>
     <script src="js/login.js"></script>
     <script src="js/api.js"></script>
+    <!--  -->
 </body>
 </html>
