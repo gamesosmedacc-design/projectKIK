@@ -2,7 +2,6 @@ const login_box = document.getElementById("login_box");
 const sign_in_text = document.querySelector(".sign_in_text");
 const button_sign_in = document.querySelector(".sign_in_btn");
 
-
 const password_box = document.querySelectorAll("#password_box");
 password_box.forEach(icon => {
     const input = icon.querySelector("input");

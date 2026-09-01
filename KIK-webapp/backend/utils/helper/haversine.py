@@ -2,13 +2,13 @@ import math
 from datetime import datetime
 
 def haversine_formula(user_latitude_position, user_longitude_position):
-        center_school_latitude_1 = ""
+        center_school_latitude_1 = "" 
         center_school_longitude_1 = ""
 
         center_school_latitude_2 = ""
         center_school_longitude_2 = ""
 
-        center_school_latitude_3 = "" 
+        center_school_latitude_3 = ""
         center_school_longitude_3 = ""
         earth_radius = 6371000
 
@@ -61,11 +61,11 @@ def haversine_formula(user_latitude_position, user_longitude_position):
 
         return check_distance_1, check_distance_2, check_distance_3
 
-now = datetime.now()
-current_time = now.time()
-print(current_time)
-set_time_late = datetime.strptime("08:00:00", "%H:%M:%S").time()
-print(set_time_late)
+# now = datetime.now()
+# current_time = now.time()
+# print(current_time)
+# set_time_late = datetime.strptime("08:00:00", "%H:%M:%S").time()
+# print(set_time_late)
 
-if current_time < set_time_late:
-        print("kamu terlambat")
+# if current_time < set_time_late:
+#         print("kamu terlambat")

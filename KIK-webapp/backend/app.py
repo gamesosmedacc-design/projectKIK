@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify, session
 from flask_cors import CORS
-from utils.helper.signIn import user_select_data_sign_in
-from utils.helper.userAbsent import user_absent
+from utils.helper.signIn import check_user_data
+# from utils.helper.userAbsent import user_absent
 from utils.helper.haversine import haversine_formula
 from datetime import datetime, time
 from dotenv import load_dotenv
@@ -31,23 +31,20 @@ def home():
 @app.route("/sign_in", methods=['POST'])
 def sign_in():
     data = request.get_json()
-    password = data.get("password")
-    username = data.get("username")
+    password_data = data.get("password")
+    username_data = data.get("username")
+    nis_data = data.get("nis")
 
-    data_user = user_select_data_sign_in(username)
+    data = check_user_data(username_data)
 
-    if data_user == None:
+    if data == None:
         return jsonify({"success":False, "message":"username atau password salah"})
 
-    password_hash = data_user["password_hash"]
+    password_hash = data.hashed_pw
 
-    if not bcrypt.checkpw(password.encode(), password_hash.encode()):
+    if not bcrypt.checkpw(password_data.encode(), password_hash.encode()):
         return jsonify({"success":False, "message":"username atau password salah"})
 
-    user_id = data_user["id"]
-    print(user_id)
-    session["id"] = user_id
-    print(session)
     return jsonify({"success":True, "message":"selamat datang kembali"})
 
 @app.route("/absent", methods=['POST'])

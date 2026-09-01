@@ -28,6 +28,7 @@ class users(base):
 engine = create_engine(db_path)
 
 with Session(engine) as session:
-    data = session.scalars(select(users).where(users.id == 1)).first()
+    data = session.scalars(select(users).where(users.id == 2)).first()
     session.delete(data)
     session.commit()
+    print('data dihapus')
