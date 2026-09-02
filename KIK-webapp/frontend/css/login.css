@@ -178,4 +178,8 @@ body {
         max-width: 250px;
         margin: 4px;
     }
+
+    #class_ {
+        display: none;
+    }
 }
