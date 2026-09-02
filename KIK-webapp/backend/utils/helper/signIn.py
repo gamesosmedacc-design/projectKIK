@@ -26,7 +26,6 @@ class users(base):
 engine = create_engine(db_path)
 with Session(engine) as session:
     def check_user_data(username_data):
-        data_username = username_data
 
         data = session.scalars(select(users).where(users.username == username_data)).first()
         if data:

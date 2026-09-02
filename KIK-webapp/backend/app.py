@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify, session
 from flask_cors import CORS
 from utils.helper.signIn import check_user_data
+from utils.helper.signUp import insert_user_data
 # from utils.helper.userAbsent import user_absent
 from utils.helper.haversine import haversine_formula
 from datetime import datetime, time
@@ -47,48 +48,89 @@ def sign_in():
 
     return jsonify({"success":True, "message":"selamat datang kembali"})
 
-@app.route("/absent", methods=['POST'])
-def absent():
+@app.route("/sign_up", methods=["POST"])
+def sign_up():
     data = request.get_json()
-    user_id = session.get("id")
-    print(user_id)
+    data_username = data.get("data_username")
+    data_password = data.get("data_password")
+    data_class = data.get("data_class")
+    data_role = data.get("data_role")
+    data_email = data.get("data_email")
+    data_nis = data.get("data_nis")
+    data_phone_number = data.get("data_phone_number")
 
-    if not user_id :
-        return jsonify({"success":False, "message":"cannot reach BE"}), 401
+    if data == None:
+        return jsonify({"success":False, "message":"data is not found"}), 401
+
+    if data_username == "":
+        return jsonify({"success":False, "message":"nama tidak boleh kosong"}), 401
+
+    if data_password == "":
+        return jsonify({"success":False, "message":"password tidak boleh kosong"}), 401
+
+    if data_class == "":
+        return jsonify({"success":False, "message":"kelas tidak boleh kosong"}), 401
+
+    if data_email == "":
+        return jsonify({"success":False, "message":"email tidak boleh kosong"}), 401
+
+    if data_nis == "":
+        return jsonify({"success":False, "message":"nis tidak boleh kosong"}), 401
+
+    if data_phone_number == "":
+        return jsonify({"success":False, "message":"nomor hp tidak boleh kosong"}), 401
+
+    if data_password == None:
+        return jsonify({"success":False, "message":"gagal membuat akun karna passwordmu masih kosong"}), 401
+
+    hashed_pw = bcrypt.hashpw(data_password.encode(), bcrypt.gensalt())
+    hashed_pw_str = hashed_pw.decode()
+    insert_user_data(data_username, hashed_pw_str, data_class, data_role, data_email, data_nis, data_phone_number)
+
+    return jsonify({"success":True, "message":"sejauh ini masih benar"}), 200
+
+# @app.route("/absent", methods=['POST'])
+# def absent():
+#     data = request.get_json()
+#     user_id = session.get("id")
+#     print(user_id)
+
+#     if not user_id :
+#         return jsonify({"success":False, "message":"cannot reach BE"}), 401
     
-    user_latitude_position = float(data.get("user_latitude"))
-    user_longitude_position = float(data.get("user_longitude"))
-    user_status = data.get("data_status")
-    user_comment = data.get("comment")
-    now = datetime.now()
-    current_time = now.time()
-    late_limit = datetime.strptime("08:00:00", "%H:%M:%S").time()
+#     user_latitude_position = float(data.get("user_latitude"))
+#     user_longitude_position = float(data.get("user_longitude"))
+#     user_status = data.get("data_status")
+#     user_comment = data.get("comment")
+#     now = datetime.now()
+#     current_time = now.time()
+#     late_limit = datetime.strptime("08:00:00", "%H:%M:%S").time()
 
-    distance_from_center = haversine_formula(user_latitude_position, user_longitude_position)
+#     distance_from_center = haversine_formula(user_latitude_position, user_longitude_position)
 
-    if current_time < absent_open or current_time > absent_close :
-        return jsonify({"succes":False, "message":"this feature is cannot use right now"})
+#     if current_time < absent_open or current_time > absent_close :
+#         return jsonify({"succes":False, "message":"this feature is cannot use right now"})
 
-    if user_status == None :
-        return jsonify({"success":False, "message":"please enter your status"}), 400
+#     if user_status == None :
+#         return jsonify({"success":False, "message":"please enter your status"}), 400
 
-    if user_status == "hadir":
-        if distance_from_center[1] or distance_from_center[1] or distance_from_center[2]:
-            if current_time > absent_late:
-                user_status = "terlambat"
-                user_absent(user_id, user_status, user_comment, user_latitude_position, user_longitude_position)
-                return jsonify({"succes":False, "message":"attendance was logg, pls confirm to your teacher"})
+#     if user_status == "hadir":
+#         if distance_from_center[1] or distance_from_center[1] or distance_from_center[2]:
+#             if current_time > absent_late:
+#                 user_status = "terlambat"
+#                 user_absent(user_id, user_status, user_comment, user_latitude_position, user_longitude_position)
+#                 return jsonify({"succes":False, "message":"attendance was logg, pls confirm to your teacher"})
     
-    if user_status == "sakit" or user_status == "izin" or user_status == "dispen":
-        if user_comment == " " :
-            return jsonify({"success":False, "message":"please enter your reason"}), 400
+#     if user_status == "sakit" or user_status == "izin" or user_status == "dispen":
+#         if user_comment == " " :
+#             return jsonify({"success":False, "message":"please enter your reason"}), 400
 
-        else : 
-            user_absent(user_id, user_status, user_comment, user_latitude_position, user_longitude_position)
-            return jsonify({"success":True, 'message':"get well soon"}), 200
+#         else : 
+#             user_absent(user_id, user_status, user_comment, user_latitude_position, user_longitude_position)
+#             return jsonify({"success":True, 'message':"get well soon"}), 200
 
-    user_absent(user_id, user_status, user_comment, user_latitude_position, user_longitude_position)
-    return jsonify({"success":True, "message":"finally you did it"}), 200
+#     user_absent(user_id, user_status, user_comment, user_latitude_position, user_longitude_position)
+#     return jsonify({"success":True, "message":"finally you did it"}), 200
 
 if __name__ == "__main__":
     app.run(debug=True)
