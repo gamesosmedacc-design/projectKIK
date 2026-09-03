@@ -39,5 +39,3 @@ with Session(engine) as session :
 
         session.add_all([data])
         session.commit()
-
-# insert_user_data("Hady lamar", hashed_pw_str, "X TKJ", "murid", "hadylamarKDG@gmail.com", "0813", "081234567890")

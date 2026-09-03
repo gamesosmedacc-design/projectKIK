@@ -8,6 +8,7 @@ from datetime import datetime, time
 from dotenv import load_dotenv
 import os
 import bcrypt
+import re
 
 load_dotenv()
 
@@ -39,14 +40,14 @@ def sign_in():
     data = check_user_data(username_data)
 
     if data == None:
-        return jsonify({"success":False, "message":"username atau password salah"})
+        return jsonify({"success":False, "message":"username atau password salah"}), 400
 
     password_hash = data.hashed_pw
 
     if not bcrypt.checkpw(password_data.encode(), password_hash.encode()):
-        return jsonify({"success":False, "message":"username atau password salah"})
+        return jsonify({"success":False, "message":"username atau password salah"}), 400
 
-    return jsonify({"success":True, "message":"selamat datang kembali"})
+    return jsonify({"success":True, "message":"selamat datang kembali"}), 200
 
 @app.route("/sign_up", methods=["POST"])
 def sign_up():
@@ -59,29 +60,106 @@ def sign_up():
     data_nis = data.get("data_nis")
     data_phone_number = data.get("data_phone_number")
 
+    symbol_regex = r'^[a-zA-Z0-9\s.,_]+$'
+    char_regex = r'^[a-zA-Z]+$'
+    number_regex = r'^[0-9]+$'
+    class_regex = r'^(X|XI|XII)+$'
+    major_regex = r'^(TP|TKR|TKJ|TKP|ALDP|ATPH|DPIB)+$'
+
     if data == None:
-        return jsonify({"success":False, "message":"data is not found"}), 401
+        return jsonify({"success":False, "message":"data is not found"}), 400
 
+    # Username ==================================================
+    
     if data_username == "":
-        return jsonify({"success":False, "message":"nama tidak boleh kosong"}), 401
+        return jsonify({"success":False, "message":"nama tidak boleh kosong"}), 400
 
-    if data_password == "":
-        return jsonify({"success":False, "message":"password tidak boleh kosong"}), 401
+    if len(data_username) > 50:
+        return jsonify({"success":False, "message":"nama tidak boleh lebih dari 50 karakter!"}), 400
 
-    if data_class == "":
-        return jsonify({"success":False, "message":"kelas tidak boleh kosong"}), 401
+    if not re.search(symbol_regex, data_username):
+        return jsonify({"success":False, "message":"nama tidak boleh mengandung simbol apapun kecuali '_'"}), 400
+
+    # Username ==================================================
+    
+
+    # password ==================================================
+    
+    if not data_password:
+        return jsonify({"success":False, "message":"gagal membuat akun karna passwordmu masih kosong"}), 400
+
+    if len(data_password) < 8:
+        return jsonify({"success":False, "message":"password minimal 8 karakter!"}), 400
+
+    if not re.search(symbol_regex, data_password):
+        return jsonify({"success":False, "message":"password tidak boleh mengandung simbol"}), 400
+
+    if not re.search(r'[a-zA-Z]', data_password) or not re.search(r'[0-9]', data_password):
+        return jsonify({"success":False, "message":"sebaiknya password berisi huruf dan angka"}), 400
+
+    # password ==================================================
+
+    # class & role ==============================================
+    if data_role == "teacher":
+        data_class = "teacher"
+
+    elif data_role == "student":
+        if data_class == "":
+            return jsonify({"success":False, "message":"kelas tidak boleh kosong"}), 400
+
+        class_part = data_class.split()
+
+        if len(class_part) < 2:
+            return jsonify({"success":False, "message":"format kelas harus <kelas> <jurusan>"}), 400
+
+        if not re.fullmatch(class_regex, class_part[0]):
+            return jsonify({"success":False, "message":"format kelas salah gunakan <X|XI|XII>"}), 400
+
+        if not re.fullmatch(major_regex, class_part[1]):
+            return jsonify({"success":False, "message":"format jurusan salah gunakan <TP|TKR|TKJ|TKP|ALDP|ATPH|DPIB>"}), 400
+
+    # class & role ==============================================
+
+    # email =====================================================
 
     if data_email == "":
-        return jsonify({"success":False, "message":"email tidak boleh kosong"}), 401
+        return jsonify({"success":False, "message":"email tidak boleh kosong"}), 400
 
-    if data_nis == "":
-        return jsonify({"success":False, "message":"nis tidak boleh kosong"}), 401
+    if not data_email.endswith(("@gmail.com", "@belajar.id")):
+        return jsonify({"success":False, "message":"email harus di akhiri dengan @gmail.com atau @belajar.id"}), 400
 
-    if data_phone_number == "":
-        return jsonify({"success":False, "message":"nomor hp tidak boleh kosong"}), 401
 
-    if data_password == None:
-        return jsonify({"success":False, "message":"gagal membuat akun karna passwordmu masih kosong"}), 401
+    # email =====================================================
+
+    # nis =======================================================
+    
+    if data_nis:
+
+        if data_nis == "":
+            return jsonify({"success":False, "message":"nis tidak boleh kosong"}), 400
+
+        if re.search(char_regex, data_nis):
+            return jsonify({"success":False, "message":"kamu yakin itu nis kamu?"}), 400
+
+        if len(data_nis) > 4:
+            return jsonify({"success":False, "message":"nis biasanya hanya 4 digit saja"}), 400
+
+        if not re.fullmatch(number_regex, data_nis):
+            return jsonify({"success":False, "message":"kamu harus menggunakan angka untuk nis kamu"}), 400
+        
+    # nis =======================================================
+
+    # phone number ==============================================
+    
+    if data_phone_number:
+
+        if data_phone_number == "":
+            return jsonify({"success":False, "message":"nomor hp kamu kosong"}), 400
+
+        if not re.fullmatch(number_regex, data_phone_number):
+            return jsonify({"success":False, "message":"nomor hanya boleh di isi angka"}), 400
+
+    # phone number ==============================================
 
     hashed_pw = bcrypt.hashpw(data_password.encode(), bcrypt.gensalt())
     hashed_pw_str = hashed_pw.decode()
@@ -96,7 +174,7 @@ def sign_up():
 #     print(user_id)
 
 #     if not user_id :
-#         return jsonify({"success":False, "message":"cannot reach BE"}), 401
+#         return jsonify({"success":False, "message":"cannot reach BE"}), 400
     
 #     user_latitude_position = float(data.get("user_latitude"))
 #     user_longitude_position = float(data.get("user_longitude"))

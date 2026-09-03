@@ -35,5 +35,3 @@ with Session(engine) as session:
             print("none data")
 
         return data
-
-# check_user_data("Xenozone")
