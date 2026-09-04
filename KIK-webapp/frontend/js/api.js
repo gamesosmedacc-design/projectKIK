@@ -7,9 +7,23 @@ async function api_requests(endpoint, method, data) {
             body: data ? JSON.stringify(data): null
         });
         return await response.json();
-    
+        
     } catch (error) {
         console.error("Error", error);
         return { success : false, message : "connection failed"}
     };
 }
+
+async function api_get(endpoint, method) {
+    try {
+        const response = await fetch(`http://127.0.0.1:5000${endpoint}`, {
+            method : method,
+            headers : { "content-type": "application/json"}
+        });
+        return await response.json();
+
+    } catch (error) {
+        console.error("Error", error);
+        return { success : false, message : "connection failed"}
+    };
+};

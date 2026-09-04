@@ -1,3 +1,20 @@
+document.addEventListener("DOMContentLoaded", async () => {
+    try {
+        const data = await api_get("/dashboard", "GET");
+        if (data.success) {
+            alert("kamu berhasil ke dashboard");
+        } else {
+            alert("kamu gagal ke dashboard kembali ke halaman login");
+            window.location.href = "login.html";
+        }
+    } catch (error) {
+        console.error("Error", error);
+        window.location.href = "login.html";
+        alert("server deactive");
+    }
+})
+
+
 const bar_btn = document.getElementById("bar_icon_btn");
 
 bar_btn.addEventListener("click", (e) => {

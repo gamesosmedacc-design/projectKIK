@@ -6,11 +6,20 @@ from utils.helper.signUp import insert_user_data
 from utils.helper.haversine import haversine_formula
 from datetime import datetime, time
 from dotenv import load_dotenv
+from functools import wraps
 import os
 import bcrypt
 import re
 
 load_dotenv()
+
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if "session_id" not in session  :
+            return jsonify({"success":False, "message":"cannot get the session"}), 401
+        return f(*args, **kwargs)
+    return decorated_function
 
 absent_open = time(6, 0, 0)
 absent_late = time(7, 30, 0)
@@ -33,8 +42,8 @@ def home():
 @app.route("/sign_in", methods=['POST'])
 def sign_in():
     data = request.get_json()
-    password_data = data.get("password")
-    username_data = data.get("username")
+    password_data = data.get("password_value")
+    username_data = data.get("username_value")
     nis_data = data.get("nis")
 
     data = check_user_data(username_data)
@@ -46,6 +55,8 @@ def sign_in():
 
     if not bcrypt.checkpw(password_data.encode(), password_hash.encode()):
         return jsonify({"success":False, "message":"username atau password salah"}), 400
+
+    session["session_id"] = data.id
 
     return jsonify({"success":True, "message":"selamat datang kembali"}), 200
 
@@ -163,9 +174,21 @@ def sign_up():
 
     hashed_pw = bcrypt.hashpw(data_password.encode(), bcrypt.gensalt())
     hashed_pw_str = hashed_pw.decode()
-    insert_user_data(data_username, hashed_pw_str, data_class, data_role, data_email, data_nis, data_phone_number)
+    new_user_id = insert_user_data(data_username, hashed_pw_str, data_class, data_role, data_email, data_nis, data_phone_number)
+
+    session["user_id"] = new_user_id
 
     return jsonify({"success":True, "message":"sejauh ini masih benar"}), 200
+
+@app.route("/dashboard", methods=["GET"])
+@login_required
+def dashboard():
+    user_id = session["session_id"]
+
+    if not user_id:
+        return jsonify({"success":False, "message":"login atau sesi telah habis"}), 400
+
+    return jsonify({"success":True, "message":"selamat datang kembali"}), 200
 
 # @app.route("/absent", methods=['POST'])
 # def absent():
