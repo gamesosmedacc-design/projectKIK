@@ -1,19 +1,40 @@
-document.addEventListener("DOMContentLoaded", async () => {
-    try {
-        const data = await api_get("/dashboard", "GET");
-        if (data.success) {
-            alert("kamu berhasil ke dashboard");
-        } else {
-            alert("kamu gagal ke dashboard kembali ke halaman login");
-            window.location.href = "login.html";
-        }
-    } catch (error) {
-        console.error("Error", error);
-        window.location.href = "login.html";
-        alert("server deactive");
-    }
-})
+// document.addEventListener("DOMContentLoaded", async () => {
+//     try {
+//         const data = await api_get("/dashboard", "GET");
+//         if (data.success) {
+//             alert("kamu berhasil ke dashboard");
+//         } else {
+//             alert("kamu gagal ke dashboard kembali ke halaman login");
+//             window.location.href = "login.html";
+//         }
+//     } catch (error) {
+//         console.error("Error", error);
+//         window.location.href = "login.html";
+//         alert("server deactive");
+//     }
+// })
 
+// async function my_name() {
+//     try {
+//         const data = await api_get("/me", "GET");
+
+//         if (data.success) {
+//         const user = data.data;
+//         const nama = user.nama;
+//         const kelas = user.kelas;
+
+//         document.getElementById("greetings").textContent = nama;
+        
+//         } else {
+//         alert("sepertinya ada suatu masalah");
+//         console.error('Error', data.message)
+//         }
+//     } catch (error) {
+//         console.error("Error", error);
+//     }
+// };
+
+// my_name();
 
 const bar_btn = document.getElementById("bar_icon_btn");
 

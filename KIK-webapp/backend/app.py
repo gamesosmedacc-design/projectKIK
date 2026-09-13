@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify, session
 from flask_cors import CORS
 from utils.helper.signIn import check_user_data
 from utils.helper.signUp import insert_user_data
+from utils.helper.get_from_database import get_from_database
 # from utils.helper.userAbsent import user_absent
 from utils.helper.haversine import haversine_formula
 from datetime import datetime, time
@@ -189,6 +190,23 @@ def dashboard():
         return jsonify({"success":False, "message":"login atau sesi telah habis"}), 400
 
     return jsonify({"success":True, "message":"selamat datang kembali"}), 200
+
+@app.route("/me", methods=["GET"])
+@login_required
+def whoami():
+    user_id = session["session_id"]
+
+    if not user_id:
+        return jsonify({"success":False, "message":"login atau sesi telah habis"}), 400
+
+    data = get_from_database(user_id)
+    data_lengkap = {
+        "nama":data.username,
+        "kelas":data.class_,
+        "role":data.role
+    }
+    print(f"user dengan nama = {data.username}, kelas {data.class_}, ditemukan!")
+    return jsonify({"success":True, "message":"selamat datang kembali!", "data":data_lengkap}), 200
 
 # @app.route("/absent", methods=['POST'])
 # def absent():

@@ -18,7 +18,8 @@ async function api_get(endpoint, method) {
     try {
         const response = await fetch(`http://127.0.0.1:5000${endpoint}`, {
             method : method,
-            headers : { "content-type": "application/json"}
+            headers : { "content-type": "application/json"},
+            credentials : "include"
         });
         return await response.json();
 
