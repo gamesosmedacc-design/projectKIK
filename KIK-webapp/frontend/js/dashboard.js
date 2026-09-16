@@ -1,40 +1,47 @@
-// document.addEventListener("DOMContentLoaded", async () => {
-//     try {
-//         const data = await api_get("/dashboard", "GET");
-//         if (data.success) {
-//             alert("kamu berhasil ke dashboard");
-//         } else {
-//             alert("kamu gagal ke dashboard kembali ke halaman login");
-//             window.location.href = "login.html";
-//         }
-//     } catch (error) {
-//         console.error("Error", error);
-//         window.location.href = "login.html";
-//         alert("server deactive");
-//     }
-// })
+document.addEventListener("DOMContentLoaded", async () => {
+    try {
+        const data = await api_get("/dashboard", "GET");
+        if (data.success) {
+            alert("kamu berhasil ke dashboard");
+        } else {
+            alert("kamu gagal ke dashboard kembali ke halaman login");
+            window.location.href = "login.html";
+        }
+    } catch (error) {
+        console.error("Error", error);
+        window.location.href = "login.html";
+        alert("server deactive");
+    }
+})
 
-// async function my_name() {
-//     try {
-//         const data = await api_get("/me", "GET");
+async function my_name() {
+    try {
+        const data = await api_get("/me", "GET");
 
-//         if (data.success) {
-//         const user = data.data;
-//         const nama = user.nama;
-//         const kelas = user.kelas;
+        if (data.success) {
+        const user = data.data;
+        const name = user.nama;
+        const class_ = user.kelas;
 
-//         document.getElementById("greetings").textContent = nama;
+        document.getElementById("greetings").textContent = name;
+        document.getElementById("name").textContent = name;
+        document.getElementById("class_").textContent = class_;
+
         
-//         } else {
-//         alert("sepertinya ada suatu masalah");
-//         console.error('Error', data.message)
-//         }
-//     } catch (error) {
-//         console.error("Error", error);
-//     }
-// };
+        } else {
+        alert("sepertinya ada suatu masalah");
+        console.error('Error', data.message)
+        }
+    } catch (error) {
+        console.error("Error", error);
+    }
+};
 
-// my_name();
+my_name();
+
+
+const right_nav_sheet = document.getElementById("right_nav_sheet");
+const wrapper_section = document.querySelector(".right_sheet_container");
 
 const bar_btn = document.getElementById("bar_icon_btn");
 
@@ -43,9 +50,6 @@ bar_btn.addEventListener("click", (e) => {
     
     right_nav_sheet.showModal();
 });
-
-const right_nav_sheet = document.getElementById("right_nav_sheet");
-const wrapper_section = document.querySelector(".right_sheet_container");
 
 right_nav_sheet.addEventListener("click", () => {
     right_nav_sheet.close();
