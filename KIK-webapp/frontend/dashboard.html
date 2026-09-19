@@ -13,14 +13,32 @@
             <h1>Dashboard <span id="greetings">Xeno</span>!</h1>
             <img src="assets/icon/bars-solid (1).png" id="bar_icon_btn" alt="bars-solid">
         </nav>
-        <marquee behavior="scroll" direction="right" scrollamount="15"><p>SMKN 2 KANDANGAN</p></marquee>
+        <marquee behavior="scroll" direction="LEFT" scrollamount="15" scrolldelay="300"><p>SMKN 2 KANDANGAN - SMK BISA, SMK HEBAT, SMKN 2 KANDANGAN JUARA!</p></marquee>
         
         <div id="main_section">
             <main id="main_content">
                 <img src="assets/img/profile-contoh.jpeg" id="profile_picture">
                 <p ><span id="name">Xeno</span> | <span id="class_"> XII TKJ</span></p>
                 <div id="dashboard_area">
-                    <div id="status_area">
+                    <div id="attendance_log">
+                        <div class="attendance_card" id="card_hadir">
+                            <p class="count" id="hadir_count">0</p>
+                            <p>Hadir</p>
+                        </div>
+                        <div class="attendance_card" id="card_sakit">
+                            <p class="count" id="sakit_count">0</p>
+                            <p>Sakit</p>
+                        </div>
+                        <div class="attendance_card" id="card_izin">
+                            <p class="count" id="izin_count">0</p>
+                            <p>Izin</p>
+                        </div>
+                        <div class="attendance_card" id="card_alpa">
+                            <p class="count" id="alpa_count">0</p>
+                            <p>Alpa</p>
+                        </div>
+                    </div>
+                    <!-- <div id="status_area">
                         <div id="attendance_status">
                             <p>Tepat Waktu!</p>
                         </div>
@@ -43,7 +61,7 @@
                         <div id="environtment_status">
                             <p>mendung</p>
                             <p>22℃</p>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </main>

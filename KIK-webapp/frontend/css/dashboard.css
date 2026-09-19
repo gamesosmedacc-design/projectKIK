@@ -1,11 +1,11 @@
 @font-face {
     font-family: 'jetbrains';
-    src: url("../assets/fonts/JetBrainsMono-Regular.ttf") format("truetype");
+    src: url("../assets/fonts/Outfit-ExtraBold.ttf") format("truetype");
     font-weight: normal;
     font-style: normal;
 
     font-family: 'josefin';
-    src: url("../assets/fonts/JosefinSans-Medium.ttf") format("truetype");
+    src: url("../assets/fonts/Outfit-Bold.ttf") format("truetype");
     font-weight: normal;
     font-style: normal;
 }
@@ -27,8 +27,10 @@
     --accents: #F5CB5C;
     --secondary: #E8EDDF;
 
-    --detail: linear-gradient(135deg, #3E8914, #4dbc0d);
+    --detail: linear-gradient(135deg, #4dbc0d, #3E8914);
     --detail1: linear-gradient(135deg, #4c06d6,#3a0aa9);
+    --detail2: linear-gradient(135deg, #e81717, #a50c0c);
+    --detail3: linear-gradient(135deg, #f59709, #ca5a0a);
 }
 
 @keyframes slide_right_to_left {
@@ -165,21 +167,56 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: center;
+        /* justify-content: center; */
         overflow: hidden;
         gap: 12px;
     }
 
-    #dashboard_area #status_area {
+    #attendance_log {
+        display: flex;
+        top: 0;
+        gap: 12px;
+    }
+
+    #attendance_log .attendance_card{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 50px;
+        width: 65px;
+        font-size: 16px;
+        border-radius: 12px;
+        margin-top: 12px;
+    }
+
+    #attendance_log #card_hadir {
+        border: 2px solid green;
+        background: var(--detail);
+    }
+    
+    #attendance_log #card_alpa {
+        border: 2px solid red;
+        background: var(--detail2);
+    }
+    
+    #attendance_log #card_izin {
+        border: 2px solid blue;
+        background: var(--detail1);
+    }
+    
+    #attendance_log #card_sakit {
+        border: 2px solid orange;
+        background: var(--detail3);
+    }
+/*  #dashboard_area #status_area {
         display: flex;
         border-top-left-radius: 12px;
         border-top-right-radius: 12px;
-        /* padding-top: 40px; */
         width: 100%;
         height: 100%;
         max-height: 60px;
         align-items: center;
-        /* justify-content: center; */
     }
     
     
@@ -256,7 +293,7 @@
         gap: 12px;
         align-items: center;
         justify-content: center;
-    }
+    } */
     
     #right_sheet_container {
         width: 200px;
