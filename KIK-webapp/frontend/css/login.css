@@ -1,17 +1,32 @@
-* {
-    font-family: "arial";
+@font-face {
+    font-family: 'jetbrains';
+    src: url("../assets/fonts/Outfit-Regular.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+
+    font-family: 'josefin';
+    src: url("../assets/fonts/Outfit-Bold.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
 }
 
-body {
-    background: linear-gradient(180deg, #0000FF, #7878ff);
-    margin: 0;
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    animation: background_animation 1s linear infinite;
-    background-size: 400% 400%;
-    background-repeat: no-repeat;
+:root {
+    --base: #CFDBD5;
+    --primary: #333533;
+    --surface:  #242423;
+    --accents: #F5CB5C;
+    --secondary: #E8EDDF;
+
+    --detail: linear-gradient(135deg, #4dbc0d, #3E8914);
+    --detail1: linear-gradient(135deg, #4c06d6,#3a0aa9);
+    --detail2: linear-gradient(135deg, #e81717, #a50c0c);
+    --detail3: linear-gradient(135deg, #f59709, #ca5a0a);
+    --detail4: linear-gradient(135deg, #0a0c0a, #242432);
+}
+
+* {
+    font-family: 'josefin';
+    color: var(--base);
 }
 
 @keyframes background_animation {
@@ -19,6 +34,19 @@ body {
     50% { background-position: 100% 50%;}
     100% { background-position: 0% 50%;}
 }
+
+body {
+    background: var(--detail4);
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: background_animation 5s linear infinite;
+    background-size: 400% 400%;
+    background-repeat: no-repeat;
+}
+
 
 @media(min-width:360px) {
     #login_box {
@@ -32,14 +60,16 @@ body {
         max-height: 340px;
         width: 100%;
         height: 100%;
-        background-color: #fff;
-        box-shadow: 0px 4px 8px #211758;
+        border: 2px solid var(--accents);
+        background-color: var(--primary);
+        box-shadow: 0px 4px 8px var(--surface);
     }
 
     .start_text {
         text-align: center;
         margin: 8px 0px 0px 0px; /*formatnya atas kanan bawah kiri*/
         font-size: 25px;
+        color: var(--base);
     }
 
     .logo {
@@ -55,7 +85,9 @@ body {
         width: 250px;
         padding: 12px;
         box-sizing: border-box;
-        border: 1px solid black;
+        color: var(--base);
+        border: 2px solid var(--accents);
+        background-color: var(--surface);
         border-radius: 5px;
         outline: none; /* untuk menghilangkan border bawaan saat di klik*/
         padding-right: 40px;
@@ -106,8 +138,17 @@ body {
         border-radius: 15px;
         margin: 4px 0px 0px 0px; 
         color: white;
-        background-color: #211758;
+        background-color: var(--surface);
+        border: 2px solid var(--accents);
         cursor: pointer;
+    }
+    
+    #login_box button:active {
+        cursor: progress;
+    }
+
+    #register_box button:active {
+        cursor: progress;
     }
 
     #register_box {
@@ -118,26 +159,24 @@ body {
         align-items: center;
         border-radius: 20px;
         max-width: 350px;
-        max-height: 620px;
+        max-height: 700px;
         width: 100%;
         height: 100%;
-        background-color: #fff;
-        box-shadow: 0px 4px 8px #211758;
+        background-color: var(--primary);
+        box-shadow: 0px 4px 8px var(--surface);
+        border: 2px solid var(--accents);
     }
     
     #register_box input{
         width: 250px;
         padding: 12px;
         box-sizing: border-box;
-        border: 1px solid black;
+        border: 2px solid var(--accents);
+        background-color: var(--surface);
         border-radius: 5px;
         outline: none; /* untuk menghilangkan border bawaan saat di klik*/
         padding-right: 40px;
         transition: 0.5s ease;
-    }
-
-    #register_box input:focus {
-        box-shadow: 2px 2px red;
     }
 
     #register_box #password_box:focus {
@@ -146,6 +185,8 @@ body {
     }
 
     #register_box select{
+        background-color: var(--primary);
+        border: 2px solid var(--accents);
         width: 100%;
         text-align: center;
         max-width: 60px;
@@ -159,7 +200,7 @@ body {
     }
 
     #login_box a, #register_box a {
-        color: blue;
+        color: var(--accents);
     }
 
     .link {
@@ -181,5 +222,9 @@ body {
 
     #class_ {
         display: none;
+    }
+
+    #subject_teach {
+        display: flex;
     }
 }

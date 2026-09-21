@@ -1,9 +1,40 @@
+@font-face {
+    font-family: 'jetbrains';
+    src: url("../assets/fonts/Outfit-ExtraBold.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+
+    font-family: 'josefin';
+    src: url("../assets/fonts/Outfit-Bold.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+}
+
+:root {
+    --base: #CFDBD5;
+    --primary: #333533;
+    --surface:  #242423;
+    --accents: #F5CB5C;
+    --secondary: #E8EDDF;
+
+    --detail: linear-gradient(135deg, #4dbc0d, #3E8914);
+    --detail1: linear-gradient(135deg, #4c06d6,#3a0aa9);
+    --detail2: linear-gradient(135deg, #e81717, #a50c0c);
+    --detail3: linear-gradient(135deg, #f59709, #ca5a0a);
+    --detail4: linear-gradient(135deg, #333533, #242432)
+}
+
+
 * {
-    font-family: arial;
+    font-family: 'josefin';
+}
+
+html {
+    font-size: 10px;
 }
 
 body {
-    background: linear-gradient(270deg, #0000FF, #7878FF);
+    background: var(--detail4);
     margin: 0;
     height: 100vh;
     display: flex;
@@ -14,17 +45,20 @@ body {
 }
 
 #greeting {
-    color: white;
-    text-shadow: #000;
+    text-align: center;
+    color: var(--base);
+    /* text-shadow: 2px 2px 1px var(--accents); */
     font-size: 100px;
-    height: 200px;
+    height: 100px;
+    font-size: clamp(6rem, 5vw, 20rem);
 }
 
 #continue_btn #button_continue {
     border: none;
-    background: #211758;
+    background-color: var(--surface);
+    border: 2px solid var(--accents);
     padding: 24px 44px 24px 44px; /*formatnya atas kanan bwh kiri*/
-    color: white;
+    color: var(--base);
     border-radius: 55px;
     font-size: 24px;
     cursor: pointer;
@@ -34,17 +68,19 @@ body {
 }
 
 #continue_btn p{
-    color: white;
-    font-size: 12px;
+    color: var(--base);
     text-align: center;
     gap: 0;
 }
 
-#continue_btn #button_continue:hover {
-    transform: scale(1.1);
+#continue_btn #button_continue:hover,
+#continue_btn #button_continue:active {
+    background-color: var(--accents);
+    border: 2px solid var(--primary);
+    color: var(--primary);
 }
 
 #continue_btn p:hover {
     text-decoration: underline;
-    text-decoration-color: yellow;
+    text-decoration-color: var(--accents);
 }

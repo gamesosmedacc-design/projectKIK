@@ -8,6 +8,8 @@ const username = document.getElementById("username");
 const register_box = document.getElementById("register_box");
 const login_box = document.getElementById("login_box");
 
+const subject_box = document.getElementById("subject_teach"); 
+const call_name = document.getElementById("call_name");
 const create_username = document.getElementById("create_username");
 const create_password = document.getElementById("create_password");
 const Nis = document.getElementById("create_nis");
@@ -87,11 +89,13 @@ document.getElementById("role").addEventListener("change", (e)=>{
     if (role_value === "teacher"){
         alert("kamu adalah guru");
         class_box.style.display = "none";
+        subject_box.style.display = "flex";
     }
 
     if (role_value === "student"){
         alert("kamu adalah murid");
         class_box.style.display = "flex";
+        subject_box.style.display = "none";
     }
 });
 
@@ -99,6 +103,8 @@ document.getElementById("register_box").addEventListener("submit", async functio
     e.preventDefault();
 
     let class_value = class_.value.trim();
+    const call_name_value = call_name.value;
+    const subject_value = subject_box.value;
     const create_password_value = create_password.value;
     const create_username_value = create_username.value;
     const nis_value = Nis.value.trim();
@@ -148,11 +154,27 @@ document.getElementById("register_box").addEventListener("submit", async functio
         alert("kamu yakin itu nis kamu?");
         return;
     }
+
+    if (call_name_value === "") {
+        alert("nama panggilan harus di isi");
+        return;
+    }
+
+    if (call_name_value.split(/\s+/).length > 1) {
+        alert("nama panggilan harus berisikan satu kata");
+        return;
+    }
     
     // class =============================================================
     if (role_value === "teacher"){
-        if (class_value == ""){
-            class_value = "teacher";
+        if (subject_value === "") {
+            alert("Masukkan Proli atau Mapel bapak ibu sekalian");
+            return;
+        }
+
+        if (num_regex.test(subject_value)) {
+            alert("Mata Pelajaran atau Proli tidak boleh menggunakan angka");
+            return;
         }
     }
     
@@ -213,6 +235,8 @@ document.getElementById("register_box").addEventListener("submit", async functio
         data_password: create_password_value,
         data_nis: nis_value,
         data_role: role_value,
+        data_call_name: call_name_value,
+        data_subject: subject_value,
         data_class: class_value,
         data_email: email_value,
         data_phone_number: phone_number_value,

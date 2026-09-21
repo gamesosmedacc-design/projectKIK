@@ -10,16 +10,6 @@
     font-style: normal;
 }
 
-* {
-    margin: 0px;
-    padding: 0px;
-    box-sizing: border-box;
-}
-
-::-webkit-scrollbar {
-    display: none;
-}
-
 :root {
     --base: #CFDBD5;
     --primary: #333533;
@@ -32,6 +22,17 @@
     --detail2: linear-gradient(135deg, #e81717, #a50c0c);
     --detail3: linear-gradient(135deg, #f59709, #ca5a0a);
 }
+
+* {
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
 
 @keyframes slide_right_to_left {
     from {

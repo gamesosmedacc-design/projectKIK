@@ -1,4 +1,8 @@
+from sqlalchemy import create_engine, select, Column, Integer, String
+from sqlalchemy.orm import declarative_base, Session
 from flask import Flask, request, jsonify, session
+from sqlalchemy.exc import IntegrityError
+from utils.tools.database import Session_local
 from flask_cors import CORS
 from utils.helper.signIn import check_user_data
 from utils.helper.signUp import insert_user_data
@@ -13,6 +17,8 @@ import bcrypt
 import re
 
 load_dotenv()
+
+se = Session_local()
 
 def login_required(f):
     @wraps(f)
@@ -66,6 +72,8 @@ def sign_up():
     data = request.get_json()
     data_username = data.get("data_username")
     data_password = data.get("data_password")
+    data_call_name = data.get("data_call_name")
+    data_subject = data.get("data_subject")
     data_class = data.get("data_class")
     data_role = data.get("data_role")
     data_email = data.get("data_email")
@@ -111,9 +119,27 @@ def sign_up():
 
     # password ==================================================
 
-    # class & role ==============================================
+    # call name =================================================
+
+    if not data_call_name :
+        return jsonify({"success":False, "message":"nama panggilan harus di isi"}), 400
+
+    if len(data_call_name.split()) > 1:
+        return jsonify({"success":False, "message":"nama panggilan tidak boleh lebih dari 1 kata"}), 400
+
+    if re.fullmatch(number_regex, data_call_name):
+        return jsonify({"success":False, "message":"nama panggilan tidak boleh berisi angka"})
+
+    # class & subject & role ====================================
+
     if data_role == "teacher":
-        data_class = "teacher"
+        if data_subject == "":
+            return jsonify({"succes":False, "message":"mapel tidak boleh kosong"}), 400
+
+        if re.fullmatch(number_regex, data_subject):
+            return jsonify({"success":False, "message":"biasanya mapel atau proli tidak mengandung angka"}), 400
+        
+        data_class = None
 
     elif data_role == "student":
         if data_class == "":
@@ -130,6 +156,7 @@ def sign_up():
         if not re.fullmatch(major_regex, class_part[1]):
             return jsonify({"success":False, "message":"format jurusan salah gunakan <TP|TKR|TKJ|TKP|ALDP|ATPH|DPIB>"}), 400
 
+        data_subject = None
     # class & role ==============================================
 
     # email =====================================================
@@ -175,9 +202,15 @@ def sign_up():
 
     hashed_pw = bcrypt.hashpw(data_password.encode(), bcrypt.gensalt())
     hashed_pw_str = hashed_pw.decode()
-    new_user_id = insert_user_data(data_username, hashed_pw_str, data_class, data_role, data_email, data_nis, data_phone_number)
 
-    session["user_id"] = new_user_id
+    try :
+        data = check_user_data(data_username)
+        new_user_id = insert_user_data(data_username, hashed_pw_str, data_call_name, data_subject, data_class, data_role, data_email, data_nis, data_phone_number)
+        session["session_id"] = data.id
+
+    except IntegrityError:
+            se.rollback()
+            return jsonify({"success":False, "message":"username sudah digunakan"})
 
     return jsonify({"success":True, "message":"sejauh ini masih benar"}), 200
 
@@ -201,9 +234,10 @@ def whoami():
 
     data = get_from_database(user_id)
     data_lengkap = {
-        "nama":data.username,
-        "kelas":data.class_,
-        "role":data.role
+        "name":data.call_name,
+        "role":data.role,
+        "subject":data.subject,
+        "class_":data.class_,
     }
     print(f"user dengan nama = {data.username}, kelas {data.class_}, ditemukan!")
     return jsonify({"success":True, "message":"selamat datang kembali!", "data":data_lengkap}), 200
