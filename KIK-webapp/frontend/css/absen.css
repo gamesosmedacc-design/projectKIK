@@ -1,0 +1,200 @@
+@font-face {
+    font-family: 'jetbrains';
+    src: url("../assets/fonts/Outfit-Regular.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+
+    font-family: 'josefin';
+    src: url("../assets/fonts/Outfit-Bold.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+}
+
+:root {
+    --base: #CFDBD5;
+    --primary: #333533;
+    --surface:  #242423;
+    --accents: #F5CB5C;
+    --secondary: #E8EDDF;
+
+    --detail: linear-gradient(135deg, #4dbc0d, #3E8914);
+    --detail1: linear-gradient(135deg, #4c06d6,#3a0aa9);
+    --detail2: linear-gradient(135deg, #e81717, #a50c0c);
+    --detail3: linear-gradient(135deg, #f59709, #ca5a0a);
+    --detail4: linear-gradient(135deg, #0a0c0a, #242432);
+}
+
+* {
+    font-family: 'josefin';
+}
+
+html {
+    font-size: 16px
+}
+
+@keyframes background_animation {
+    0% { background-position: 0% 50%;}
+    50% { background-position: 100% 50%;}
+    100% { background-position: 0% 50%;}
+}
+
+body {
+    display: flex;
+    background: var(--detail4);
+    margin: 0;
+    height: 100vh;
+    animation: background_animation 5s linear infinite;
+    background-size: 400% 400%;
+    background-repeat: no-repeat;
+    justify-content: center;
+    align-items: center;
+}
+
+@media(min-width: 360px) {
+    main {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 12px;
+        background-color: var(--primary);
+        padding: 12px;
+        border-radius: 12px;
+        border: 2px solid var(--accents)
+        
+    }
+
+    main #status_wrap {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        border-radius: 25px;
+        background:  var(--surface);
+        padding: 16px;
+        border: 2px solid var(--accents);
+    }
+
+    main #status_wrap .items {
+        flex-grow: 1 ;
+        color: var(--base);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        border-radius: 12px;
+        background-color: var(--primary);
+        border: 2px solid var(--accents);
+        min-width: 60px;
+        transition: 0.5s ease;
+        transform: scaleX(1);
+    }
+    
+    main #status_wrap .items.active {
+        background: var(--base);
+        transform: scaleX(1.1);
+        transform: scale(1.1);
+        color: var(--surface);
+        transition: 0.5s ease;
+    }
+
+    main #btn-wrapper {
+        display: flex;
+        flex-direction: row;
+        gap: 12px;
+        align-items: center;
+        justify-content: center;       
+    }
+
+    main button {
+        background-color: var(--surface);
+        color: white;
+        border: 2px solid var(--accents);
+        border-radius: 8px ;
+        min-height: 40px;
+        min-width: 80px;
+        transition: 0.5s ease;
+    }
+
+    main #absent-btn {
+        display: none;
+        transform: scale(1.1);
+        background-color: #fff;
+        color: var(--surface);
+    }
+
+    main button:active {
+        background-color: var(--base);
+        color: var(--surface)
+    }
+
+    main #take-photo {
+        display: flex;
+        background-color: var(--surface);
+        min-width: 50px;
+        min-height: 50px;
+        border-radius: 50%;
+        padding: 4px;
+        border: 4px solid var(--accents);
+    }
+
+    main #take-photo:active {
+        background-color: var(--base);
+    }
+
+    main #present-area {
+        display: flex;
+        min-height: 400px ;
+        min-width: 300px;
+        flex-direction: column;
+        gap: 30px;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    main #cam_wrapper canvas {
+        display: none;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        color: white;
+        aspect-ratio: 1 / 1;
+        max-width: 250px;
+        object-fit: cover;
+        transform: scaleX(-1);
+        top: 12px;
+        border-radius: 25px;
+        border: 4px solid var(--accents);
+    }
+
+    main #cam_wrapper video {
+        display: flex;
+        /* position: relative; */
+        color: white;
+        aspect-ratio: 1 / 1;
+        max-width: 250px;
+        object-fit: cover;
+        transform: scaleX(-1);
+        /* top: 12px; */
+        border-radius: 25px;
+        border: 4px solid var(--accents);
+    }
+
+    main #nfw-area {
+        display: none;
+        min-height: 400px ;
+        min-width: 300px;
+        /* background-color: green; */
+        margin: 12px;
+        flex-direction: column;
+        gap: 30px;
+        justify-content: center;
+        align-items: center;
+    }
+
+    main #nfw-area .upload-btn {
+        text-align: center;
+        /* background-color: red; */
+        width: 100px;
+        cursor: pointer;
+    }
+}

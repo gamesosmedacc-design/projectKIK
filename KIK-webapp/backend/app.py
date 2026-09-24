@@ -204,8 +204,8 @@ def sign_up():
     hashed_pw_str = hashed_pw.decode()
 
     try :
-        data = check_user_data(data_username)
         new_user_id = insert_user_data(data_username, hashed_pw_str, data_call_name, data_subject, data_class, data_role, data_email, data_nis, data_phone_number)
+        data = check_user_data(data_username)
         session["session_id"] = data.id
 
     except IntegrityError:

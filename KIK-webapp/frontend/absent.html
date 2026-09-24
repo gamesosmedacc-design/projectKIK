@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/absen.css">
+</head>
+<body> 
+    <main>
+        <div id="status_wrap">
+            <div class="items active" onclick="show_form('present-area')">
+                <p>Hadir</p>
+            </div>
+            <div class="items" onclick="show_form('nfw-area')">
+                <p>sakit</p>
+            </div>
+            <div class="items" onclick="show_form('excused-area')">
+                <p>Izin</p>
+            </div>
+        </div>
+        <form id="present-area" class="form">
+            <div id="cam_wrapper">
+                <canvas id="canvas"></canvas>
+                <video id="cam" autoplay playsinline></video>
+            </div>
+            <div id="btn-wrapper">
+                <button id="dashboard-page" class="btn">Dashboard</button>
+                <button id="absent-btn" class="btn">Absen</button>
+                <div id="take-photo"></div>
+                <button id="rephoto-btn" class="btn">Foto lagi</button>
+            </div>
+        </form>
+
+        <div id="nfw-area" class="form">
+            <textarea class="comment-input" placeholder="Tulis alasanmu..."></textarea>
+            <label for="file-note" class="upload-btn">
+                    Pilih File
+            </label>
+            <input type="file" id="file-note" accept="image/*" hidden>
+            <p id="file-name"></p>
+        </div>
+    </main>
+    <script src="js/absent.js"></script>
+</body>
+</html>

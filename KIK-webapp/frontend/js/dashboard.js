@@ -43,7 +43,7 @@ my_name();
 
 
 const right_nav_sheet = document.getElementById("right_nav_sheet");
-const wrapper_section = document.querySelector(".right_sheet_container");
+const wrapper_section = document.getElementById("right_sheet_container");
 
 const bar_btn = document.getElementById("bar_icon_btn");
 
@@ -58,16 +58,15 @@ right_nav_sheet.addEventListener("click", () => {
 });
 
 wrapper_section.addEventListener("click", (e)=> {
-    e.stopPropagation()
+    e.stopPropagation();
 });
 
-const absent_btn = document.getElementById("absent_feature");
-absent_btn.addEventListener("click", (e) => {
-    e.preventDefault()
+const absent_btn = document.getElementById("absent_page_btn");
+absent_btn.addEventListener("click", (ex) => {
+    ex.preventDefault();
 
-    const bottom_sheet = document.getElementById("bottom_sheet");
-    bottom_sheet.showModal();
-    right_nav_sheet.close();
+    alert("masuk halaman absen");
+    window.location.href = "absent.html";
 });
 
 const submit_btn = document.getElementById("submit_absent");
@@ -99,5 +98,4 @@ submit_btn.addEventListener("click", (ev) => {
             console.log("we cant get your current position", error.message);
         }
     );
-
-    });
+});
