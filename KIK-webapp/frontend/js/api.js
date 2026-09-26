@@ -1,6 +1,6 @@
 const url = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
 ? "http://127.0.0.1:5000"
-: "https://projectkik-production.up.railway.app";
+: "https://projectkik-production-ef1c.up.railway.app";
 
 async function api_requests(endpoint, method, data) {
     try {
