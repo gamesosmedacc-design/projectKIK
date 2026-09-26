@@ -1,45 +1,45 @@
-document.addEventListener("DOMContentLoaded", async () => {
-    try {
-        const data = await api_get("/dashboard", "GET");
-        if (data.success) {
-            alert("kamu berhasil ke dashboard");
-        } else {
-            alert("kamu gagal ke dashboard kembali ke halaman login");
-            window.location.href = "login.html";
-        }
-    } catch (error) {
-        console.error("Error", error);
-        window.location.href = "login.html";
-        alert("server deactive");
-    }
-})
+// document.addEventListener("DOMContentLoaded", async () => {
+//     try {
+//         const data = await api_get("/dashboard", "GET");
+//         if (data.success) {
+//             alert("kamu berhasil ke dashboard");
+//         } else {
+//             alert("kamu gagal ke dashboard kembali ke halaman login");
+//             window.location.href = "login.html";
+//         }
+//     } catch (error) {
+//         console.error("Error", error);
+//         window.location.href = "login.html";
+//         alert("server deactive");
+//     }
+// })
 
-async function my_name() {
-    try {
-        const data = await api_get("/me", "GET");
+// async function my_name() {
+//     try {
+//         const data = await api_get("/me", "GET");
 
-        if (data.success) {
-        const user = data.data;
-        const name = user.name;
-        const class_ = user.class_;
-        const subject = user.subject;
+//         if (data.success) {
+//         const user = data.data;
+//         const name = user.name;
+//         const class_ = user.class_;
+//         const subject = user.subject;
 
-        document.getElementById("greetings").textContent = name;
-        document.getElementById("name").textContent = name;
-        document.getElementById("class_").textContent = class_;
-        document.getElementById("class_").textContent = subject;
+//         document.getElementById("greetings").textContent = name;
+//         document.getElementById("name").textContent = name;
+//         document.getElementById("class_").textContent = class_;
+//         document.getElementById("class_").textContent = subject;
 
         
-        } else {
-        alert("sepertinya ada suatu masalah");
-        console.error('Error', data.message)
-        }
-    } catch (error) {
-        console.error("Error", error);
-    }
-};
+//         } else {
+//         alert("sepertinya ada suatu masalah");
+//         console.error('Error', data.message)
+//         }
+//     } catch (error) {
+//         console.error("Error", error);
+//     }
+// };
 
-my_name();
+// my_name();
 
 
 const right_nav_sheet = document.getElementById("right_nav_sheet");

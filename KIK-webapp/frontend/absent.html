@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="css/absen.css">
 </head>
 <body> 
+    <button id="dashboard-page" class="btn">Dashboard</button>
     <main>
         <div id="status_wrap">
             <div class="items active" onclick="show_form('present-area')">
@@ -19,26 +20,50 @@
                 <p>Izin</p>
             </div>
         </div>
+        
         <form id="present-area" class="form">
             <div id="cam_wrapper">
                 <canvas id="canvas"></canvas>
                 <video id="cam" autoplay playsinline></video>
             </div>
+            <div id="time-location-wrap">
+                <span class="info-text">Batas waktu jam 08.00!</span>
+                <span id="location-from-first-center" class="info-text"><span class="info-text" id="diff-meter-first">-</span>m dari lapangan hijau</span>
+                <span id="location-from-second-center" class="info-text"><span class="info-text" id="diff-meter-second">-</span>m dari area belakang</span>
+                <span id="location-from-third-center" class="info-text"><span class="info-text" id="diff-meter-third">-</span>m dari lapangan basket</span>
+                <img src="" alt="">
+            </div>
             <div id="btn-wrapper">
-                <button id="dashboard-page" class="btn">Dashboard</button>
-                <button id="absent-btn" class="btn">Absen</button>
+                <button id="absent-btn" class="btn">Submit</button>
                 <div id="take-photo"></div>
                 <button id="rephoto-btn" class="btn">Foto lagi</button>
             </div>
         </form>
 
         <div id="nfw-area" class="form">
-            <textarea class="comment-input" placeholder="Tulis alasanmu..."></textarea>
-            <label for="file-note" class="upload-btn">
-                    Pilih File
-            </label>
-            <input type="file" id="file-note" accept="image/*" hidden>
-            <p id="file-name"></p>
+            <textarea class="comment-input" id="nfw-reason" placeholder="Tulis alasanmu..."></textarea>
+            <div class="file-upload-wrap">
+                <label for="file-note-nfw" class="upload-btn-nfw">
+                        Upload surat sakit
+                </label>
+                <input type="file" id="file-note-nfw" accept="image/*" hidden>
+                <p id="file-name-nfw" class="file-name"></p>
+            </div>
+            <p class="note">Catatan : syarat harus dipenuhi <br><span id="required-link-nfw">Cek syaratnya</span></p>
+            <button id="nfw-btn" class="btn">Submit</button>
+        </div>
+        
+        <div id="excused-area" class="form">
+            <textarea class="comment-input" id="excused-reason" placeholder="Tuils alasanmu..."></textarea>
+            <div class="file-upload-wrap">
+                <label for="file-note-excused" class="upload-btn-excused">
+                    Upload surat izin
+                </label>
+                <input type="file" id="file-note-excused" accept="image/*" hidden>
+                <p id="file-name-excused" class="file-name"></p>
+            </div>
+            <p class="note">Catatan : syarat harus dipenuhi <br><span id="required-link-excused">Cek syaratnya</span></p>
+            <button id="excused-btn" class="btn">Submit</button>
         </div>
     </main>
     <script src="js/absent.js"></script>

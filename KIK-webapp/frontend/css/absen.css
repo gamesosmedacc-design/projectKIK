@@ -40,6 +40,8 @@ html {
 
 body {
     display: flex;
+    flex-direction: column;
+    gap: 12px;
     background: var(--detail4);
     margin: 0;
     height: 100vh;
@@ -62,6 +64,16 @@ body {
         border-radius: 12px;
         border: 2px solid var(--accents)
         
+    }
+
+    #dashboard-page {
+        background-color: var(--primary);
+        color: var(--base);
+        padding: 4px;
+        max-width: 100px;
+        max-height: 50px;
+        border: 2px solid var(--accents);
+        border-radius: 4px;
     }
 
     main #status_wrap {
@@ -104,28 +116,6 @@ body {
         justify-content: center;       
     }
 
-    main button {
-        background-color: var(--surface);
-        color: white;
-        border: 2px solid var(--accents);
-        border-radius: 8px ;
-        min-height: 40px;
-        min-width: 80px;
-        transition: 0.5s ease;
-    }
-
-    main #absent-btn {
-        display: none;
-        transform: scale(1.1);
-        background-color: #fff;
-        color: var(--surface);
-    }
-
-    main button:active {
-        background-color: var(--base);
-        color: var(--surface)
-    }
-
     main #take-photo {
         display: flex;
         background-color: var(--surface);
@@ -140,9 +130,13 @@ body {
         background-color: var(--base);
     }
 
+
+
+
+
     main #present-area {
         display: flex;
-        min-height: 400px ;
+        min-height: 400px;
         min-width: 300px;
         flex-direction: column;
         gap: 30px;
@@ -161,40 +155,163 @@ body {
         max-width: 250px;
         object-fit: cover;
         transform: scaleX(-1);
-        top: 12px;
         border-radius: 25px;
         border: 4px solid var(--accents);
     }
 
     main #cam_wrapper video {
         display: flex;
-        /* position: relative; */
         color: white;
         aspect-ratio: 1 / 1;
         max-width: 250px;
         object-fit: cover;
         transform: scaleX(-1);
-        /* top: 12px; */
         border-radius: 25px;
         border: 4px solid var(--accents);
     }
 
+    main 
+
+    main #present-area #absent-btn {
+        background-color: var(--surface);
+    }
+
+    main #time-location-wrap {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        min-width: 250px;
+    }
+    
+    
+    main .info-text {
+        display: flex;
+        color: var(--base);
+        text-decoration: none;
+    }
+
+
+/*  */
+
+
     main #nfw-area {
         display: none;
-        min-height: 400px ;
-        min-width: 300px;
-        /* background-color: green; */
         margin: 12px;
         flex-direction: column;
-        gap: 30px;
+        gap: 2px;
         justify-content: center;
         align-items: center;
     }
 
-    main #nfw-area .upload-btn {
+    main textarea {
+        margin: 12px;
+        padding: 12px;
+        min-width: 200px;
+        background-color: var(--surface);
+        min-height: 80px;
+        max-width: 250px;
+        max-height: 325px;
+        outline: none;
+        border: 2px solid var(--accents);
+        color: var(--base);
+        border-radius: 12px;
+    }
+
+    main textarea::placeholder {
+        color: var(--base);
+    }
+
+    main .file-upload-wrap {
+        border: 2px dashed var(--accents);
+        border-radius: 12px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        min-width: 250px;
+        min-height: 150px;
+        max-width: 250px;
+        gap: 0;
+    }
+
+    main #nfw-area .upload-btn-nfw {
         text-align: center;
-        /* background-color: red; */
-        width: 100px;
+        color: var(--base);
+        background-color: var(--surface);
+        padding: 4px;
+        border: 2px solid var(--accents);
+        border-radius: 12px;
+        max-width: 100px;
         cursor: pointer;
+        margin-bottom: auto;
+        margin-top: 12px ;
+    }
+    
+    main .file-name {
+        text-align: center;
+        color: var(--base);
+        padding: 0;
+    }
+
+    
+    main .note {
+        border-top: 1px solid var(--accents);
+        padding: 12px;
+        color: var(--base);
+        text-align: center;
+        max-width: 250px;
+    }
+
+    main span:not(".info-text") {
+        color: var(--base);
+        text-decoration: underline;
+    }
+    main span:active:not(".info-text") {
+        color: blue;
+        text-decoration: underline;
+        cursor: pointer;
+    }
+
+    main .btn {
+        background-color: var(--surface);
+        min-width: 100px;
+        min-height: 40px;
+        border-radius: 12px;
+        border: 2px solid var(--accents);
+        color: var(--base);
+        margin-bottom: 12px ;
+    }
+
+    main .btn:active {
+        background-color: var(--base);
+        color: var(--surface);
+    }
+
+
+
+
+
+    main #excused-area {
+        display: none;
+        margin: 12px;
+        flex-direction: column;
+        gap: 2px;
+        justify-content: center;
+        align-items: center;
+    }
+
+    main #excused-area .upload-btn-excused {
+        display: flex;
+        text-align: center;
+        color: var(--base);
+        padding: 4px;
+        border: 2px solid var(--accents);
+        background-color: var(--surface);
+        margin-bottom: auto;
+        margin-top: 12px;
+        max-width: 100px;
+        border-radius: 12px;
     }
 }

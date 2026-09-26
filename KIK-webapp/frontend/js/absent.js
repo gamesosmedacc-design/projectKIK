@@ -1,16 +1,42 @@
-const contraints = {
+const note_file_excused = document.getElementById("file-note-excused");
+const file_name_excused = document.getElementById('file-name-excused');
+const note_file_nfw = document.getElementById("file-note-nfw");
+const file_name_nfw = document.getElementById('file-name-nfw');
+const dashboard_btn = document.getElementById("dashboard-page");
+const canvas = document.getElementById("canvas");
+const video = document.getElementById("cam");
+const items = document.querySelectorAll(".items") 
+
+let stream;
+const constraints = {
     video: {
         facingMode: 'user',
-
     }
 }
 
-navigator.mediaDevices.getUserMedia(contraints)
-    .then((stream) => {
+navigator.mediaDevices.getUserMedia(constraints)
+    .then((videostream) => {
+
+        stream = videostream;
         document.getElementById("cam").srcObject = stream;
     })
 
-const items = document.querySelectorAll(".items") 
+document.getElementById("take-photo").addEventListener("click", (e) => {
+    e.preventDefault();
+
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+
+    const ctx = canvas.getContext("2d");
+    ctx.drawImage(video, 0, 0)
+
+    stream.getTracks().forEach(track => track.stop());
+    video.srcObject = null;
+
+    video.style.display = "none";
+    canvas.style.display = "flex";
+})
+
 items.forEach(item => {
     item.addEventListener("click", () => {
         items.forEach(item => item.classList.remove("active"));
@@ -23,11 +49,10 @@ function show_form(target) {
     forms.forEach(form => {
         form.style.display = "none";
 
+    });
     document.getElementById(target).style.display = "flex";
-    })
 }
 
-const dashboard_btn = document.getElementById("dashboard-page");
 dashboard_btn.addEventListener("click", (e) => {
     e.preventDefault();
 
@@ -35,11 +60,21 @@ dashboard_btn.addEventListener("click", (e) => {
     window.location.href = "dashboard.html";
 })
 
-const note_file = document.getElementById("file-note");
-const file_name = document.getElementById('file-name');
 
-note_file.addEventListener("change", (e) => {
+note_file_nfw.addEventListener("change", (e) => {
     e.preventDefault();
 
-    file_name.textContent = note_file.files[0]?.name || "";
+    file_name_nfw.textContent = note_file_nfw.files[0]?.name || "";
+})
+
+
+note_file_excused.addEventListener("change", (e) => {
+    e.preventDefault();
+
+    file_name_excused.textContent = note_file_excused.files[0]?.name || "";
+})
+
+document.getElementById("rephoto-btn").addEventListener("click", () => {
+    video.style.display = "flex";
+    canvas.style.display = "none";
 })
