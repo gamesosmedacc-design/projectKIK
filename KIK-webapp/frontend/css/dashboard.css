@@ -308,7 +308,7 @@
         font-family: 'jetbrains', monospace;
     }
 
-    #right_nav_sheet .items:not(#logout_btn) {
+    #right_nav_sheet .items:not(#logout-btn) {
         color: var(--base);
         background-color: var(--surface);
         display: flex;
@@ -321,8 +321,8 @@
         transition: 0.3s ease;
     }
     
-    #right_nav_sheet .items:hover:not(#logout_btn),
-    #right_nav_sheet .items:active:not(#logout_btn) {
+    #right_nav_sheet .items:hover:not(#logout-btn),
+    #right_nav_sheet .items:active:not(#logout-btn) {
         background-color: var(--secondary) !important; 
         color: var(--surface);
         transition: 0.3s ease;
