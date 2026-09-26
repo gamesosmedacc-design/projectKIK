@@ -66,8 +66,6 @@ absent_btn.addEventListener("click", (ex) => {
     ex.preventDefault();
 
     alert("masih dalam tahap development sabar ya...");
-    alert("masih dalam tahap development sabar ya...");
-    alert("masih dalam tahap development sabar ya...");
 });
 
 const achievement_btn = document.getElementById("achievement-btn");
