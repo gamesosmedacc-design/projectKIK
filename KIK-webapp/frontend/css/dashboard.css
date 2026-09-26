@@ -328,7 +328,7 @@
         transition: 0.3s ease;
     }
 
-    #right_nav_sheet #logout_btn {
+    #right_nav_sheet #logout-btn {
         color: black;
         display: flex;
         background-color: #f11;
@@ -340,8 +340,8 @@
         justify-content: center;
     }
 
-    #right_nav_sheet #logout_btn:hover,
-    #right_nav_sheet #logout_btn:active {
+    #right_nav_sheet #logout-btn:hover,
+    #right_nav_sheet #logout-btn:active {
         background-color: #900;
         border: 2px solid #f11;
         color: white;

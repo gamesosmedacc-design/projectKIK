@@ -65,9 +65,42 @@ const absent_btn = document.getElementById("absent_page_btn");
 absent_btn.addEventListener("click", (ex) => {
     ex.preventDefault();
 
-    alert("masuk halaman absen");
-    window.location.href = "absent.html";
+    alert("masih dalam tahap development sabar ya...");
+    alert("masih dalam tahap development sabar ya...");
+    alert("masih dalam tahap development sabar ya...");
 });
+
+const achievement_btn = document.getElementById("achievement-btn");
+achievement_btn.addEventListener("click", (ea) => {
+    ea.preventDefault();
+    
+    alert("masih dalam tahap development sabar ya...");
+})
+const point_btn = document.getElementById("point-btn");
+point_btn.addEventListener("click", (ea) => {
+    ea.preventDefault();
+
+    alert("masih dalam tahap development sabar ya...");
+})
+const history_btn = document.getElementById("history-btn");
+history_btn.addEventListener("click", (ea) => {
+    ea.preventDefault();
+
+    alert("masih dalam tahap development sabar ya...");
+})
+const settings_btn = document.getElementById("settings-btn");
+settings_btn.addEventListener("click", (ea) => {
+    ea.preventDefault();
+
+    alert("masih dalam tahap development sabar ya...");
+})
+const logout_btn = document.getElementById("logout-btn");
+logout_btn.addEventListener("click", (ea) => {
+    ea.preventDefault();
+
+    alert("masih dalam tahap development sabar ya...");
+})
+
 
 const submit_btn = document.getElementById("submit_absent");
 submit_btn.addEventListener("click", (ev) => {
