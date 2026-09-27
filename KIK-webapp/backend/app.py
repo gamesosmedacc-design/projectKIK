@@ -18,7 +18,6 @@ import bcrypt
 import re
 
 load_dotenv()
-base.metadata.create_all(bind=engine)
 
 se = Session_local()
 
@@ -35,13 +34,13 @@ absent_late = time(7, 30, 0)
 absent_close = time(17, 0, 0)
 
 
-is_production = os.getenv("flask_env") == "production"
+is_production = os.getenv("FLASK_ENV") == "production"
 app = Flask(__name__)
 app.secret_key = f"{os.getenv('app_secret_key')}"
 app.config.update(
     SESSION_COOKIE_HTTPONLY = True,
     SESSION_COOKIE_SAMESITE = "None" if is_production else "Lax",
-    SESSION_COOKIE_SECURE = False
+    SESSION_COOKIE_SECURE = is_production
 )
 CORS(app, supports_credentials=True, origins=["http://127.0.0.1:5500", "https://sekolah-digitalku-projectkik.vercel.app"])
 
