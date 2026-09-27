@@ -6,6 +6,8 @@ const dashboard_btn = document.getElementById("dashboard-page");
 const canvas = document.getElementById("canvas");
 const video = document.getElementById("cam");
 const items = document.querySelectorAll(".items") 
+const require_page_link_nfw = document.getElementById("required-link-nfw");
+const require_page_link_excused = document.getElementById("required-link-excused");
 
 let stream;
 const constraints = {
@@ -77,4 +79,17 @@ note_file_excused.addEventListener("change", (e) => {
 document.getElementById("rephoto-btn").addEventListener("click", () => {
     video.style.display = "flex";
     canvas.style.display = "none";
+})
+
+require_page_link_nfw.addEventListener("click", (e)=>{
+    e.preventDefault();
+
+    alert("ke halaman syarat & ketentuan...");
+    window.location.href = "requir.html";
+})
+require_page_link_excused.addEventListener("click", (e)=>{
+    e.preventDefault();
+
+    alert("ke halaman syarat & ketentuan...");
+    window.location.href = "requir.html";
 })
