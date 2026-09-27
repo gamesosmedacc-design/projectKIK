@@ -1,9 +1,10 @@
-from sqlalchemy import create_engine, select, Column, Integer, String
-from sqlalchemy.orm import declarative_base, Session
 from flask import Flask, request, jsonify, session
 from sqlalchemy.exc import IntegrityError
 from utils.tools.database import Session_local
 from flask_cors import CORS
+from utils.tools.database import base, engine
+from utils.tools.attendance import attendance
+from utils.tools.users import users
 from utils.helper.signIn import check_user_data
 from utils.helper.signUp import insert_user_data
 from utils.helper.get_from_database import get_from_database
@@ -17,6 +18,7 @@ import bcrypt
 import re
 
 load_dotenv()
+base.metadata.create_all(bind=engine)
 
 se = Session_local()
 
