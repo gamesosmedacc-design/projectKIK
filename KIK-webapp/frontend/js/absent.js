@@ -16,6 +16,13 @@ const constraints = {
     }
 }
 
+document.addEventListener("DOMContentLoaded", (e) => {
+    e.preventDefault()
+
+    alert("masih dalam tahap development ya..");
+    
+})
+
 navigator.mediaDevices.getUserMedia(constraints)
     .then((videostream) => {
 

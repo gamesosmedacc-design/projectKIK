@@ -80,7 +80,7 @@
     
     #top_navigation_bar h1 {
         font-size: 20px;
-        font-family: 'jetbrains', monospace;
+        font-family: 'josefin', monospace;
     }
 
     #top_navigation_bar #profile_pict {
@@ -210,7 +210,6 @@
         align-items: center;
         background: linear-gradient(135deg, #5257e5, #102a59);
         border: 2px solid #393da1;
-        width: 100%;
         border-radius: 12px;
     }
 
@@ -254,20 +253,40 @@
         display: flex;
         flex-direction: column;
         font-size: 14px;
-        margin-left: auto;
+        /* margin-left: auto; */
         padding: 8px 12px ;
         gap: 8px; 
     }
 
     #info_time_subject {
-        gap: 12px;
         display: flex;
-        margin-left: auto ;
+        /* flex-direction: column; */
+        justify-content: space-between;
+        padding: 4px;
+        /* background-color: red; */
+        border-top: 1px solid var(--base);
+        font-size: 12px;
+        gap: 2px;
+    }
+    
+    #info_time_subject #next_time {
+        /* background-color: black; */
+        min-width: 80px;
+        display: flex;
+        justify-content: center;
+    }
+
+    #info_time_subject #next_subject {
+        /* background-color: blue */
+        max-width: 200px;
+        text-align: right;
     }
 
     #next_teacher {
+        font-size: 12px;
         display: flex;
         flex-direction: row;
+        align-items: center;
         margin-left: auto;
         gap: 12px;
     }

@@ -26,8 +26,13 @@ async function my_name() {
 
         document.getElementById("greetings").textContent = name;
         document.getElementById("name").textContent = name;
-        document.getElementById("class_").textContent = class_;
-        document.getElementById("class_").textContent = subject;
+        if(class_) {
+            document.getElementById("class_").textContent = class_;
+        }
+
+        if(subject) {
+            document.getElementById("class_").textContent = subject;
+        }
 
         
         } else {
@@ -65,7 +70,8 @@ const absent_btn = document.getElementById("absent_page_btn");
 absent_btn.addEventListener("click", (ex) => {
     ex.preventDefault();
 
-    alert("masih dalam tahap development sabar ya...");
+    alert("ke halaman absen...");
+    window.location.href = "absent.html";
 });
 
 const achievement_btn = document.getElementById("achievement-btn");
@@ -78,7 +84,8 @@ const point_btn = document.getElementById("point-btn");
 point_btn.addEventListener("click", (ea) => {
     ea.preventDefault();
 
-    alert("masih dalam tahap development sabar ya...");
+    alert("ke halaman poin...");
+    window.location.href = "point.html";
 })
 const history_btn = document.getElementById("history-btn");
 history_btn.addEventListener("click", (ea) => {

@@ -1,0 +1,27 @@
+body {
+    margin: 0;
+    display: flex;
+    justify-content: center;
+}
+
+table {
+    width: 95vw;
+    border-collapse: collapse;
+}
+
+tr {
+    text-align: center;
+}
+
+th {
+    font-weight: 900;
+}
+
+#problem {
+    width: 85px;
+}
+
+td {
+    width: 50px;
+    height: 35px;
+}

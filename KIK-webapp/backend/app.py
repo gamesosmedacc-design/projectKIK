@@ -19,7 +19,6 @@ import re
 
 load_dotenv()
 
-se = Session_local()
 
 def login_required(f):
     @wraps(f)
@@ -211,7 +210,6 @@ def sign_up():
         session["session_id"] = data.id
 
     except IntegrityError:
-            se.rollback()
             return jsonify({"success":False, "message":"username sudah digunakan"})
 
     return jsonify({"success":True, "message":"sejauh ini masih benar"}), 200

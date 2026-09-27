@@ -9,5 +9,4 @@ env/
 .DS_Store
 Thumbs.db
 test/
-alembic/
 ngrok.exe
