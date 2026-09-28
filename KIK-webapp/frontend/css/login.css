@@ -184,19 +184,29 @@ body {
         transition: 0.5s ease;
     }
 
-    #register_box select{
-        background-color: var(--primary);
+    #register_box #role-wrap {
+        display: flex;
+        flex-direction: row;
+        gap: 12px;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #register_box .roles{
+        background-color: var(--surface);
         border: 2px solid var(--accents);
-        width: 100%;
+        padding: 4px;
         text-align: center;
-        max-width: 60px;
-        height: 100%;
-        max-height: 25px;
-        appearance: none;
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        border-radius: 12% ;
-        outline: none;
+        max-height: 35px;
+        border-radius: 12%;
+        transition: 0.5s ease;
+    }
+    
+    #register_box .roles.active,
+    #register_box .roles.active span {
+        transition: 0.5s ease;
+        background-color: var(--base);
+        color: #0a0c0a;
     }
 
     #login_box a, #register_box a {

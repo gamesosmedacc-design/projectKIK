@@ -1,0 +1,120 @@
+@font-face {
+    font-family: 'jetbrains';
+        src: url("../assets/fonts/Outfit-Regular.ttf") format("truetype");
+        font-weight: normal;
+        font-style: normal;
+    
+    font-family: 'josefin';
+        src: url("../assets/fonts/Outfit-Bold.ttf") format("truetype");
+        font-weight: normal;
+        font-style: normal;
+}
+
+
+
+:root {
+    --base: #CFDBD5;
+    --primary: #333533;
+    --surface:  #242423;
+    --accents: #F5CB5C;
+    --secondary: #E8EDDF;
+
+    --detail: linear-gradient(135deg, #4dbc0d, #3E8914);
+    --detail1: linear-gradient(135deg, #4c06d6,#3a0aa9);
+    --detail2: linear-gradient(135deg, #e81717, #a50c0c);
+    --detail3: linear-gradient(135deg, #f59709, #ca5a0a);
+    --detail4: linear-gradient(135deg, #0a0c0a, #242432);
+}
+
+* {
+    font-family: 'josefin';
+    color: var(--base);
+}
+
+@keyframes background_animation {
+    0% { background-position: 0% 50%;}
+    50% { background-position: 100% 50%;}
+    100% { background-position: 0% 50%;}
+}
+
+body {
+    background: var(--detail4);
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    animation: background_animation 5s linear infinite;
+    background-size: 400% 400%;
+    background-repeat: no-repeat;
+}
+
+main {
+    background-color: var(--primary);
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+nav {
+    position: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    top: 0px;
+    background: var(--surface);
+    width: 100vw;
+    height: 70px;
+}
+
+nav p {
+    margin-left: 12px;
+}
+
+nav input {
+    max-width: 150px;
+    padding: 4px;
+    background-color: var(--primary);
+    border: 2px solid var(--accents);
+    outline: none;
+    border-radius: 6px ;
+}
+
+nav button {
+    margin-right: 12px;
+    background-color: var(--primary);
+    color: var(--base);
+    padding: 8px;        
+    border: 2px solid var(--accents);
+    border-radius: 8px;
+}
+
+#cards-container {
+    margin: 70px 12px 0px 12px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap ;
+}
+
+.cards {
+    margin-top: 12px ;
+    background-color: var(--surface);
+    min-width: 150px;
+    max-width: 200px;
+    min-height: 100px;
+    display: flex;
+    flex-direction: column;
+    border: 2px solid var(--accents);
+    border-radius: 12px;
+}
+
+.cards img {
+    margin: auto;
+    flex: 1;
+    max-width: 70px;
+    max-height: 70px;
+}
+
+.cards p {
+    text-align: center;
+    margin: 4px;
+    border-top: 1px solid white;
+}

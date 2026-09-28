@@ -8,6 +8,7 @@ from utils.tools.users import users
 from utils.helper.signIn import check_user_data
 from utils.helper.signUp import insert_user_data
 from utils.helper.get_from_database import get_from_database
+from utils.helper.get_groups_from_databse import get_groups_from_database
 # from utils.helper.userAbsent import user_absent
 from utils.helper.haversine import haversine_formula
 from datetime import datetime, time
@@ -75,7 +76,7 @@ def sign_up():
     data_password = data.get("data_password")
     data_call_name = data.get("data_call_name")
     data_subject = data.get("data_subject")
-    data_class = data.get("data_class")
+    data_class = data.get("data_class").upper()
     data_role = data.get("data_role")
     data_email = data.get("data_email")
     data_nis = data.get("data_nis")
@@ -133,7 +134,7 @@ def sign_up():
 
     # class & subject & role ====================================
 
-    if data_role == "teacher":
+    if data_role == "Guru":
         if data_subject == "":
             return jsonify({"succes":False, "message":"mapel tidak boleh kosong"}), 400
 
@@ -142,7 +143,7 @@ def sign_up():
         
         data_class = None
 
-    elif data_role == "student":
+    elif data_role == "Murid":
         if data_class == "":
             return jsonify({"success":False, "message":"kelas tidak boleh kosong"}), 400
 
@@ -174,7 +175,6 @@ def sign_up():
     # nis =======================================================
     
     if data_nis:
-
         if data_nis == "":
             return jsonify({"success":False, "message":"nis tidak boleh kosong"}), 400
 
@@ -241,6 +241,23 @@ def whoami():
     }
     print(f"user dengan nama = {data.username}, kelas {data.class_}, ditemukan!")
     return jsonify({"success":True, "message":"selamat datang kembali!", "data":data_lengkap}), 200
+
+@app.route("/wheremyclass", methods={"GET"})
+def wheremyclass():
+    data = get_groups_from_database()
+
+    return jsonify({
+        "success":True,
+        "groups_class" :[
+        {
+            "id" : group.id,
+            "class" : group.class_,
+            "nama" : group.username,
+            "NIS" : group.nis
+        }
+        for group in data
+        ]
+    })
 
 # @app.route("/absent", methods=['POST'])
 # def absent():

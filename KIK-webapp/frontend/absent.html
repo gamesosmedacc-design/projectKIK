@@ -28,13 +28,24 @@
             </div>
             <div id="time-location-wrap">
                 <span class="info-text">Batas waktu jam 08.00!</span>
-                <span id="location-from-first-center" class="info-text"><span class="info-text" id="diff-meter-first">-</span>m dari lapangan hijau</span>
-                <span id="location-from-second-center" class="info-text"><span class="info-text" id="diff-meter-second">-</span>m dari area belakang</span>
-                <span id="location-from-third-center" class="info-text"><span class="info-text" id="diff-meter-third">-</span>m dari lapangan basket</span>
-                <img src="" alt="">
+                <div id="location-from-first-center" class="info-text">
+                    <div class="circles">
+                    </div>
+                    <span class="info-text" id="diff-meter-first"></span><span>m dari titik 1</span>
+                </div>
+                <div id="location-from-second-center" class="info-text">
+                    <div class="circles">
+                    </div>
+                    <span class="info-text" id="diff-meter-second"></span><span>m dari titik 2</span>
+                </div>
+                <div id="location-from-third-center" class="info-text">
+                    <div class="circles">
+                    </div>
+                    <span class="info-text" id="diff-meter-third"></span><span>m dari titik 3</span>
+                </div>
             </div>
             <div id="btn-wrapper">
-                <button id="absent-btn" class="btn">Submit</button>
+                <button id="submit-btn" class="btn">Submit</button>
                 <div id="take-photo"></div>
                 <button id="rephoto-btn" class="btn">Foto lagi</button>
             </div>
@@ -50,7 +61,7 @@
                 <p id="file-name-nfw" class="file-name"></p>
             </div>
             <p class="note">Catatan : syarat harus dipenuhi <br><span id="required-link-nfw">Cek syaratnya</span></p>
-            <button id="nfw-btn" class="btn">Submit</button>
+            <button id="submit-btn" class="btn">Submit</button>
         </div>
         
         <div id="excused-area" class="form">
@@ -63,9 +74,10 @@
                 <p id="file-name-excused" class="file-name"></p>
             </div>
             <p class="note">Catatan : syarat harus dipenuhi <br><span id="required-link-excused">Cek syaratnya</span></p>
-            <button id="excused-btn" class="btn">Submit</button>
+            <button id="submit-btn" class="btn">Submit</button>
         </div>
     </main>
     <script src="js/absent.js"></script>
+    <script src="js/api.js"></script>
 </body>
 </html>

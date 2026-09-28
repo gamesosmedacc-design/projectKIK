@@ -184,8 +184,18 @@ body {
     
     main .info-text {
         display: flex;
+        flex-direction: row;
+        gap: 2px;
+        align-items: center;
         color: var(--base);
         text-decoration: none;
+    }
+
+    .circles{
+        width: 15px;
+        height: 15px;
+        background-color: red;
+        border-radius: 50%;
     }
 
 

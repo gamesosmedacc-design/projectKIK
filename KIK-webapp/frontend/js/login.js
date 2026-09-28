@@ -7,24 +7,42 @@ const username = document.getElementById("username");
 
 const register_box = document.getElementById("register_box");
 const login_box = document.getElementById("login_box");
-
+const class_box = document.getElementById("class_");
 const subject_box = document.getElementById("subject_teach"); 
+
 const call_name = document.getElementById("call_name");
 const create_username = document.getElementById("create_username");
 const create_password = document.getElementById("create_password");
 const Nis = document.getElementById("create_nis");
 const class_ = document.getElementById("class_");
 const email = document.getElementById("email");
-const phone_number = document.getElementById("number");
-const role = document.getElementById("role");
+const phone_number = document.getElementById("number");  
 
 const num_regex = /[0-9]/;
 const char_regex = /[a-zA-Z]/;
 const class_num_regex = /^(X|XI|XII|10|11|12)$/i;
 const major_regex = /^(TP|TKJ|TKR|TKP|ALDP|ATPH|DPIB)$/
 const symbol_regex = /[^a-zA-Z0-9]/
+const roles = document.querySelectorAll(".roles")
 
 // VARIABELS =======================================================================
+
+roles.forEach(role => {
+    role.addEventListener("click", () => {
+        roles.forEach(role => role.classList.remove("active"));
+        role.classList.add("active");
+        
+    if (role.textContent === "Murid") {
+        class_box.style.display = "flex";
+        subject_box.style.display = "none";
+    }
+    if (role.textContent === "Guru") {
+        class_box.style.display = "none";
+        subject_box.style.display = "flex";
+    }
+    })
+})
+
 
 password_box.forEach(icon => {
     const input = icon.querySelector("input");
@@ -82,22 +100,6 @@ document.getElementById("login_link").addEventListener("click", (e)=> {
     register_box.style.display = "none";
 });
 
-document.getElementById("role").addEventListener("change", (e)=>{
-    const class_box = document.getElementById("class_");
-    const role_value = document.getElementById("role").value;
-
-    if (role_value === "teacher"){
-        alert("kamu adalah guru");
-        class_box.style.display = "none";
-        subject_box.style.display = "flex";
-    }
-
-    if (role_value === "student"){
-        alert("kamu adalah murid");
-        class_box.style.display = "flex";
-        subject_box.style.display = "none";
-    }
-});
 
 document.getElementById("register_box").addEventListener("submit", async function (e) {
     e.preventDefault();
@@ -110,7 +112,7 @@ document.getElementById("register_box").addEventListener("submit", async functio
     const nis_value = Nis.value.trim();
     const email_value = email.value.trim();
     const phone_number_value = phone_number.value.trim();
-    const role_value = role.value;
+    const role_value = document.querySelector(".roles.active")?.textContent;
 
     // username ==========================================================
     if (create_username_value === "") {
@@ -166,7 +168,7 @@ document.getElementById("register_box").addEventListener("submit", async functio
     }
     
     // class =============================================================
-    if (role_value === "teacher"){
+    if (role_value === "Guru"){
         if (subject_value === "") {
             alert("Masukkan Proli atau Mapel bapak ibu sekalian");
             return;
@@ -178,7 +180,7 @@ document.getElementById("register_box").addEventListener("submit", async functio
         }
     }
     
-    if (role_value === "student"){
+    if (role_value === "Murid"){
         if (class_value === "") {
             alert("kelas kamu belum ada");
             return;
