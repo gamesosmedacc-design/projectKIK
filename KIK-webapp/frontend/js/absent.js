@@ -7,7 +7,10 @@ const canvas = document.getElementById("canvas");
 const video = document.getElementById("cam");
 const require_page_link_nfw = document.getElementById("required-link-nfw");
 const require_page_link_excused = document.getElementById("required-link-excused");
-const items = document.querySelectorAll(".items") 
+const items = document.querySelectorAll(".items")
+const c1 = document.getElementById("c1")
+const c2 = document.getElementById("c2")
+const c3 = document.getElementById("c3")
 
 const measure_from_center_1 = document.getElementById("diff-meter-first");
 const measure_from_center_2 = document.getElementById("diff-meter-second");
@@ -22,11 +25,8 @@ const school_longitude_2 = 115.26379405844274
 const school_latitude_3 = -2.7630683719681604
 const school_longitude_3 = 115.2630044434663
 
-let user_location_lat; 
-let user_location_long; 
-
+const active_value = document.querySelector(".items.active");
 function active_value_content() {
-    const active_value = document.querySelector(".items.active");
     if (active_value) {
         console.log(active_value.textContent);
     }
@@ -59,7 +59,7 @@ function haversine(lat1, lon1, lat2, lon2) {
     return R * c;
 }
 
-navigator.geolocation.getCurrentPosition(
+navigator.geolocation.watchPosition(
     async(position) => {
         const user_latitude = position.coords.latitude;
         const user_longitude = position.coords.longitude;
@@ -71,14 +71,45 @@ navigator.geolocation.getCurrentPosition(
         const user_to_third_center_at_belakang = haversine(user_latitude, user_longitude, school_latitude_3, school_longitude_3)
         console.log(user_to_first_center_at_lap_hijau)
 
+        const minimum_diff = 60;
+
         measure_from_center_1.textContent = Math.round(user_to_first_center_at_lap_hijau);
         measure_from_center_2.textContent = Math.round(user_to_second_center_at_aula);
         measure_from_center_3.textContent = Math.round(user_to_third_center_at_belakang);
-    }
-)
 
+        if (measure_from_center_1.textContent > minimum_diff) {
+            c1.style.backgroundColor = "red";
+        } else {
+            c1.style.backgroundColor = "green";
+        }
+        if (measure_from_center_2.textContent > minimum_diff) {
+            c2.style.backgroundColor = "red";
+        } else {
+            c2.style.backgroundColor = "green";
+        }
+        if (measure_from_center_3.textContent > minimum_diff) {
+            c3.style.backgroundColor = "red";
+        } else {
+            c3.style.backgroundColor = "green";
+        }
+    })
+
+
+
+document.getElementById("submit-btn").addEventListener("click", async(e) => {
+    e.preventDefault();
+
+    const data_status = active_value.textContent
+    if (data_status === "Hadir") {
+        const data_blob = a
+        const data_latitude = user_latitude
+        const data_longitude = user_longitude
+        const data = await api_requests("/absen", "POST", {data_status, data_blob, data_latitude, data_longitude})
+    }
+
+    alert("kamu sedang mecoba absen");
+})
 document.addEventListener("DOMContentLoaded", (e) => {
-    e.preventDefault()
     
     active_value_content();
 })
