@@ -25,6 +25,9 @@ const school_longitude_2 = 115.26379405844274
 const school_latitude_3 = -2.7630683719681604
 const school_longitude_3 = 115.2630044434663
 
+let user_latitude;
+let user_longitude;
+
 const active_value = document.querySelector(".items.active");
 function active_value_content() {
     if (active_value) {
@@ -61,8 +64,8 @@ function haversine(lat1, lon1, lat2, lon2) {
 
 navigator.geolocation.watchPosition(
     async(position) => {
-        const user_latitude = position.coords.latitude;
-        const user_longitude = position.coords.longitude;
+        user_latitude = position.coords.latitude;
+        user_longitude = position.coords.longitude;
         console.log(user_latitude);
         console.log(user_longitude);
         
@@ -77,17 +80,17 @@ navigator.geolocation.watchPosition(
         measure_from_center_2.textContent = Math.round(user_to_second_center_at_aula);
         measure_from_center_3.textContent = Math.round(user_to_third_center_at_belakang);
 
-        if (measure_from_center_1.textContent > minimum_diff) {
+        if (Math.round(user_to_first_center_at_lap_hijau) > minimum_diff) {
             c1.style.backgroundColor = "red";
         } else {
             c1.style.backgroundColor = "green";
         }
-        if (measure_from_center_2.textContent > minimum_diff) {
+        if (Math.round(user_to_second_center_at_aula) > minimum_diff) {
             c2.style.backgroundColor = "red";
         } else {
             c2.style.backgroundColor = "green";
         }
-        if (measure_from_center_3.textContent > minimum_diff) {
+        if (Math.round(user_to_third_center_at_belakang) > minimum_diff) {
             c3.style.backgroundColor = "red";
         } else {
             c3.style.backgroundColor = "green";
@@ -99,12 +102,16 @@ navigator.geolocation.watchPosition(
 document.getElementById("submit-btn").addEventListener("click", async(e) => {
     e.preventDefault();
 
-    const data_status = active_value.textContent
+    const data_status = document.querySelector(".items.active").textContent
     if (data_status === "Hadir") {
         const data_blob = a
         const data_latitude = user_latitude
         const data_longitude = user_longitude
         const data = await api_requests("/absen", "POST", {data_status, data_blob, data_latitude, data_longitude})
+    }
+
+    if (data_status === "Sakit") {
+
     }
 
     alert("kamu sedang mecoba absen");
