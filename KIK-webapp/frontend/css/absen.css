@@ -195,16 +195,19 @@ body {
         width: 15px;
         height: 15px;
         background-color: red;
+        border-radius: 50%;
     }
     #c2{
         width: 15px;
         height: 15px;
         background-color: red;
+        border-radius: 50%;
     }
     #c3{
         width: 15px;
         height: 15px;
         background-color: red;
+        border-radius: 50%;
     }
 
 
