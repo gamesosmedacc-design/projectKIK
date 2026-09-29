@@ -9,7 +9,8 @@ from utils.helper.signIn import check_user_data
 from utils.helper.signUp import insert_user_data
 from utils.helper.get_from_database import get_from_database
 from utils.helper.get_groups_from_databse import get_groups_from_database
-# from utils.helper.userAbsent import user_absent
+from utils.helper.userAbsent import user_absent
+from utils.helper.savePhoto import save_to_uploads
 from utils.helper.haversine import haversine_formula
 from datetime import datetime, time
 from dotenv import load_dotenv
@@ -29,14 +30,10 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
-absent_open = time(6, 0, 0)
-absent_late = time(7, 30, 0)
-absent_close = time(17, 0, 0)
-
-
 is_production = os.getenv("FLASK_ENV") == "production"
 app = Flask(__name__)
 app.secret_key = f"{os.getenv('app_secret_key')}"
+app.config["MAX_CONTENT_LENGTH"] = 5 * 1024 * 1024
 app.config.update(
     SESSION_COOKIE_HTTPONLY = True,
     SESSION_COOKIE_SAMESITE = "None" if is_production else "Lax",
@@ -243,9 +240,13 @@ def whoami():
     return jsonify({"success":True, "message":"selamat datang kembali!", "data":data_lengkap}), 200
 
 @app.route("/wheremyclass", methods={"GET"})
+@login_required
 def wheremyclass():
     data = get_groups_from_database()
-
+    user_id = session["session_Id"]
+    
+    if not user_id:
+        return jsonify({"success":False, "message":"login atau sesi telah habis"}), 400
     return jsonify({
         "success":True,
         "groups_class" :[
@@ -259,6 +260,74 @@ def wheremyclass():
         ]
     })
 
+
+@app.route("/absent", methods=["POST"])
+@login_required
+def myabsent():
+    data = request.get_json()
+    user_id = session["session_id"]
+    data_status = data.get("data_status")
+    now = datetime.now()
+    current_time = now.time()
+    late_limit = datetime.strptime("07:30:00", "%H:%M:%S").time()
+
+    if not user_id:
+        return jsonify({"success":False, "message":"login atau sesi telah habis"}), 400
+
+    if data_status == "Hadir":
+        data_base64 = data.get("data_b64_selfie")
+        data_latitude = data.get("data_latitude")
+        data_longitude = data.get("data_longitude")
+        data_file_url = None
+        data_reason = None
+
+        data_photo_url = save_to_uploads(data_base64)
+
+        distance_from_center = haversine_formula(data_latitude, data_longitude)
+        if distance_from_center[0] or distance_from_center[1] or distance_from_center[2]:
+            if current_time > late_limit :
+                data_status = "Terlambat"
+                user_absent(user_id, data_status, data_photo_url, data_latitude, data_longitude, data_file_url, data_reason)
+                return jsonify({"success":True, "message":"kamu berhasil absen kamu terlambat +2 poin!"})
+
+            else :
+                user_absent(user_id, data_status, data_photo_url, data_latitude, data_longitude, data_file_url, data_reason)
+                return jsonify({"success":True, "message":"kehadiranmu sudah tercatat"})
+
+    elif data_status == "Sakit" or data_status == "Izin":
+        photo_url = None
+        data_latitude = data.get("data_latitude")
+        data_longitude = data.get("data_longitude")
+        data_file_url = data.get("data_file_url")
+        data_reason = data.get("data_reason")
+
+        if current_time > late_limit :
+            data_status = "Alpa"
+            user_absent(user_id, data_status, photo_url, data_latitude, data_longitude, data_file_url, data_reason)
+            return jsonify({"success":True, "message":"kamu terlambat untuk mengirim informasi"})
+
+        else :
+            user_absent(user_id, data_status, photo_url, data_latitude, data_longitude, data_file_url, data_reason)
+            return jsonify({"success":True, "message":"informasimu sudah tercatat"})
+
+    else :
+        return jsonify({"success":True, "message":"maaf status kamu tidak terdefinisi"}), 201
+
+    # elif data_status == "Izin":
+    #     photo_url = None
+    #     data_latitude = data.get("data_latitude")
+    #     data_longitude = data.get("data_longitude")
+    #     file_url = data.get("data_file_url")
+    #     reason = data.get("data_reason")
+
+    #     if current_time > late_limit :
+    #         data_status = "Alpa"
+    #         user_absent(user_id, data_status, photo_url, data_latitude, data_longitude, file_url, reason)
+    #         return jsonify({"success":True, "message":"kamu terlambat untuk mengirim informasi"})
+
+    #     else :
+    #         user_absent(user_id, data_status, photo_url, data_latitude, data_longitude, file_url, reason)
+    #         return jsonify({"success":True, "message":"informasimu sudah tercatat"})
 # @app.route("/absent", methods=['POST'])
 # def absent():
 #     data = request.get_json()
@@ -272,9 +341,6 @@ def wheremyclass():
 #     user_longitude_position = float(data.get("user_longitude"))
 #     user_status = data.get("data_status")
 #     user_comment = data.get("comment")
-#     now = datetime.now()
-#     current_time = now.time()
-#     late_limit = datetime.strptime("08:00:00", "%H:%M:%S").time()
 
 #     distance_from_center = haversine_formula(user_latitude_position, user_longitude_position)
 

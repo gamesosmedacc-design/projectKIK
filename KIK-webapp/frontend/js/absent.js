@@ -28,8 +28,8 @@ const school_longitude_3 = 115.2630044434663
 let user_latitude;
 let user_longitude;
 
-const active_value = document.querySelector(".items.active");
 function active_value_content() {
+    const active_value = document.querySelector(".items.active");
     if (active_value) {
         console.log(active_value.textContent);
     }
@@ -97,40 +97,16 @@ navigator.geolocation.watchPosition(
         }
     })
 
-
-// hhahahahh
-document.getElementById("submit-btn").addEventListener("click", async(e) => {
-    e.preventDefault();
-
-    const data_status = document.querySelector(".items.active").textContent
-    if (data_status === "Hadir") {
-        const data_blob = a
-        const data_latitude = user_latitude
-        const data_longitude = user_longitude
-        const data = await api_requests("/absen", "POST", {data_status, data_blob, data_latitude, data_longitude})
-    }
-
-    if (data_status === "Sakit") {
-
-    }
-
-    alert("kamu sedang mecoba absen");
-})
-document.addEventListener("DOMContentLoaded", (e) => {
-    
-    active_value_content();
-})
-
 navigator.mediaDevices.getUserMedia(constraints)
 .then((videostream) => {
     
     stream = videostream;
     document.getElementById("cam").srcObject = stream;
-    })
+})
 
 document.getElementById("take-photo").addEventListener("click", (e) => {
     e.preventDefault();
-
+    
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
     
@@ -156,7 +132,7 @@ function show_form(target) {
     const forms = document.querySelectorAll(".form");
     forms.forEach(form => {
         form.style.display = "none";
-
+        
     });
     document.getElementById(target).style.display = "flex";
 }
@@ -193,9 +169,41 @@ require_page_link_nfw.addEventListener("click", (e)=>{
     alert("ke halaman syarat & ketentuan...");
     window.location.href = "requir.html";
 })
+
 require_page_link_excused.addEventListener("click", (e)=>{
     e.preventDefault();
 
     alert("ke halaman syarat & ketentuan...");
     window.location.href = "requir.html";
+})
+
+const submit_btn_present = document.getElementById("submit-btn-present")
+submit_btn_present.addEventListener("click", async(e) => {
+    e.preventDefault();
+    submit_btn_present.disabled = true;
+
+    const data_status = document.querySelector(".items.active").textContent
+    if (data_status === "Hadir") {
+        const data_b64_selfie = canvas.toDataURL("image/jpeg", 0.6);
+        console.log(data_b64_selfie)
+        const data_latitude = user_latitude
+        const data_longitude = user_longitude
+        try {
+            const data = await api_requests("/absent", "POST", {data_status, data_b64_selfie, data_latitude, data_longitude})
+            if (data.success) {
+                alert("kehadiran kamu sudah dicatat");
+            } else {
+                alert(data.message)                }
+        } catch (error) {
+            alert(error.message)
+        } finally {
+            submit_btn.disabled = false;
+        }
+    }
+    
+    if (data_status === "Sakit") {
+    
+    }
+    
+    alert("kamu sedang mecoba absen");
 })

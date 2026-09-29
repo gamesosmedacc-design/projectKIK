@@ -8,8 +8,10 @@ class attendance(base):
     __tablename__ = "attendance"
     id = Column(Integer, primary_key=True)
     users_id = Column(Integer, ForeignKey("users.id"), nullable=False)
-    status = Column(Enum("hadir", "sakit", "izin", "alpa", name="status_enum"), nullable=False)
-    photo_url = Column(String(), nullable=True)
+    status = Column(Enum("Hadir", "Sakit", "Izin", "Alpa", "Terlambat", name="status_enum"), nullable=False)
+    photo_url = Column(String(), nullable=True) 
+    user_latitude = Column(String(), nullable=True)
+    user_longitude = Column(String(), nullable=True)
     file_url = Column(String(), nullable=True)
     reason = Column(String(), nullable=True)
     date = Column(Date, nullable=False, default = lambda: datetime.now(ZoneInfo("Asia/Makassar").date()))
