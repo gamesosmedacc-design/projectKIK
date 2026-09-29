@@ -9,4 +9,5 @@ env/
 .DS_Store
 Thumbs.db
 test/
+uploads/
 ngrok.exe
