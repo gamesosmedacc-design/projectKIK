@@ -80,17 +80,17 @@ navigator.geolocation.watchPosition(
         measure_from_center_2.textContent = Math.round(user_to_second_center_at_aula);
         measure_from_center_3.textContent = Math.round(user_to_third_center_at_belakang);
 
-        if (Math.round(user_to_first_center_at_lap_hijau) > minimum_diff) {
+        if (user_to_first_center_at_lap_hijau > minimum_diff) {
             c1.style.backgroundColor = "red";
         } else {
             c1.style.backgroundColor = "green";
         }
-        if (Math.round(user_to_second_center_at_aula) > minimum_diff) {
+        if (user_to_second_center_at_aula > minimum_diff) {
             c2.style.backgroundColor = "red";
         } else {
             c2.style.backgroundColor = "green";
         }
-        if (Math.round(user_to_third_center_at_belakang) > minimum_diff) {
+        if (user_to_third_center_at_belakang > minimum_diff) {
             c3.style.backgroundColor = "red";
         } else {
             c3.style.backgroundColor = "green";
