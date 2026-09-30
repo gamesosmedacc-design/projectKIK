@@ -281,7 +281,6 @@ def myabsent():
         data_file_url = None
         data_reason = None
 
-        data_photo_url = save_to_uploads(data_base64, user_id, data_today)
 
         if not data_status:
             return jsonify({"success":False, "message":"maaf status kamu tidak diketahui"})
@@ -293,6 +292,8 @@ def myabsent():
             return jsonify({"success":False, "message":"maaf lokasi kamu tidak diketahui"})
 
         distance_from_center = haversine_formula(data_latitude, data_longitude)
+        data_photo_url = save_to_uploads(data_base64, user_id, data_today)
+        
         if distance_from_center[0] or distance_from_center[1] or distance_from_center[2]:
             if current_time > late_limit :
                 data_status = "Terlambat"
