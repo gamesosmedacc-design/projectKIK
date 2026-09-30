@@ -1,10 +1,12 @@
 import base64
 import os
+from supabase import create_client
 from datetime import datetime
 
-def save_to_uploads(data_base64, upload_folder="uploads"):
-    os.makedirs(upload_folder, exist_ok=True)
+supabase = create_client(os.environ["supabase_url", os.environ["supabase_key"]])
+BUCKET = "uploads"
 
+def save_to_uploads(data_base64, user_id, date_time):
     if "," in data_base64:
         header, encoded = data_base64.split(",", 1)
     else :
@@ -12,10 +14,8 @@ def save_to_uploads(data_base64, upload_folder="uploads"):
 
     image_data = base64.b64decode(encoded)
 
-    filename = f"absent_{datetime.now().strftime('%Y%m%d_%H%M%S_%f')}.png"
-    file_path = os.path.join(upload_folder, filename)
-
-    with open(file_path, "wb") as file :
-        file.write(image_data)
-
-    return f"/uploads/{filename}" 
+    path = f'{user_id}/{date_time}.png'
+    supabase.storage.from_(BUCKET).upload(
+        path, image_data, {"content-type": "image/jpeg", "upsert": "true"}
+    )
+    return path
