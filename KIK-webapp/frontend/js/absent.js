@@ -182,28 +182,45 @@ submit_btn_present.addEventListener("click", async(e) => {
     e.preventDefault();
     submit_btn_present.disabled = true;
 
-    const data_status = document.querySelector(".items.active").textContent
+    const data_status = document.querySelector(".items.active").textContent.trim()
     if (data_status === "Hadir") {
         const data_b64_selfie = canvas.toDataURL("image/jpeg", 0.6);
         console.log(data_b64_selfie)
         const data_latitude = user_latitude
         const data_longitude = user_longitude
         try {
-            const data = await api_requests("/absent", "POST", {data_status, data_b64_selfie, data_latitude, data_longitude})
+            const data = await api_requests("/present", "POST", {data_status, data_b64_selfie, data_latitude, data_longitude})
             if (data.success) {
                 alert("kehadiran kamu sudah dicatat");
             } else {
                 alert(data.message)                }
-        } catch (error) {
-            alert(error.message)
-        } finally {
-            submit_btn.disabled = false;
+            } catch (error) {
+                alert(error.message)
+            } finally {
+                submit_btn_present.disabled = false;
+            }
         }
-    }
+        alert("kamu sedang mecoba absen hadir");
+    })
+
+    const file_to_base64 = document.getElementById("file-note-nfw");
+    file_to_base64.addEventListener("change", () => {
+        const file = file_to_base64.files[0]
     
-    if (data_status === "Sakit") {
+        const reader = new FileReader();
     
-    }
+        reader.onload = () => {
+            const file_in_base64 = reader.result;
+            console.log(file_in_base64)
+        }
     
-    alert("kamu sedang mecoba absen");
+        reader.readAsDataURL(file)
+    })
+    
+const submit_btn_nfw = document.getElementById("submit-btn-nfw")
+submit_btn_nfw.addEventListener("click", async(e) => {
+    e.preventDefault()
+    
+    const data_status = document.querySelector(".items.active").textContent.trim()
+
 })
