@@ -9,7 +9,7 @@ class Attendance(base):
     __tablename__ = "attendance"
     id = Column(Integer, primary_key=True)
     users_id = Column(Integer, ForeignKey("users.id"), nullable=False)
-    status = Column(Enum("Hadir", "Sakit", "Izin", "Alpa", "Terlambat", name="status_enum"), nullable=False )
+    status = Column(String(20), nullable=False )
     photo_url = Column(String(), nullable=True) 
     user_latitude = Column(String(), nullable=True)
     user_longitude = Column(String(), nullable=True)
