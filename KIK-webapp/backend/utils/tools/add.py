@@ -1,7 +1,7 @@
 
 from database import base, engine
-from users import users
-from attendance import attendance
+from users import User
+from attendance import Attendance
 
-# base.metadata.create_all(bind=engine)
+# base.metadata.drop_all(bind=engine)
 # print('tabel dibuat')

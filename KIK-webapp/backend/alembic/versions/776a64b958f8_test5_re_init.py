@@ -1,8 +1,8 @@
-"""fitur absent
+"""test5? re init
 
-Revision ID: 234ce2c2ba04
-Revises: 0725a760370d
-Create Date: 2026-09-30 07:42:56.574551
+Revision ID: 776a64b958f8
+Revises: 
+Create Date: 2026-10-01 01:34:38.295913
 
 """
 from typing import Sequence, Union
@@ -12,8 +12,8 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = '234ce2c2ba04'
-down_revision: Union[str, Sequence[str], None] = '0725a760370d'
+revision: str = '776a64b958f8'
+down_revision: Union[str, Sequence[str], None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
@@ -45,10 +45,10 @@ def upgrade() -> None:
     sa.Column('user_longitude', sa.String(), nullable=True),
     sa.Column('file_url', sa.String(), nullable=True),
     sa.Column('reason', sa.String(), nullable=True),
-    sa.Column('date', sa.Date(), nullable=False),
+    sa.Column('date_insert', sa.Date(), nullable=True),
     sa.ForeignKeyConstraint(['users_id'], ['users.id'], ),
     sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('users_id', 'date', name='unique_attendance_per_day')
+    sa.UniqueConstraint('users_id', 'date_insert', name='unique_attendance_per_day')
     )
     # ### end Alembic commands ###
 
