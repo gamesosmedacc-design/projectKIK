@@ -4,8 +4,8 @@ from sqlalchemy.exc import IntegrityError
 from utils.tools.database import Session_local
 from flask_cors import CORS
 from utils.tools.database import base, engine
-from utils.tools.attendance import attendance
-from utils.tools.users import users
+from utils.tools.attendance import Attendance
+from utils.tools.users import User
 from utils.helper.signIn import check_user_data
 from utils.helper.signUp import insert_user_data
 from utils.helper.get_from_database import get_from_database
@@ -19,6 +19,8 @@ from functools import wraps
 import os, bcrypt, re
 
 load_dotenv()
+
+base.metadata.create_all(bind=engine)
 
 def login_required(f):
     @wraps(f)
