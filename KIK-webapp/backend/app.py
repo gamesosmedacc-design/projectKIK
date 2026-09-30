@@ -20,8 +20,6 @@ import os, bcrypt, re
 
 load_dotenv()
 
-base.metadata.create_all(bind=engine)
-
 def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
