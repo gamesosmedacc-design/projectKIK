@@ -3,7 +3,7 @@ import os
 from supabase import create_client
 from datetime import datetime
 
-supabase = create_client(os.environ["supabase_url", os.environ["supabase_key"]])
+supabase = create_client(os.environ["supabase_url"], os.environ["supabase_key"])
 BUCKET = "uploads"
 
 def save_to_uploads(data_base64, user_id, date_time):
