@@ -267,7 +267,7 @@ def myabsent():
     data_status = data.get("data_status")
     now = datetime.now()
     current_time = now.time()
-    rn = datetime.now(ZoneInfo("Asia/Makkasar"))
+    rn = datetime.now(ZoneInfo("Asia/Makkassar"))
     data_today = datetime.now(ZoneInfo("Asia/Makkassar")).date()
     late_limit = rn.time()
 
