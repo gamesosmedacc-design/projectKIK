@@ -1,11 +1,11 @@
 from sqlalchemy import create_engine, select, Column, Integer, String
 from utils.tools.database import base, engine, Session_local
-from utils.tools.attendance import attendance
+from utils.tools.attendance import Attendance
 
 def user_absent(user_id, data_status, data_photo_url, data_latitude, data_longitude, data_file_url, data_reason):
     session = Session_local()
     try :
-        data_absent = attendance(
+        data_absent = Attendance(
             users_id = user_id,
             status = data_status,
             photo_url = data_photo_url,

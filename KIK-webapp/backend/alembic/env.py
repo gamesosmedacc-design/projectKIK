@@ -8,8 +8,8 @@ from alembic import context
 import os
 from dotenv import load_dotenv
 from utils.tools.database import base
-from utils.tools.users import users
-from utils.tools.attendance import attendance
+from utils.tools.users import User
+from utils.tools.attendance import Attendance
 
 load_dotenv()
 

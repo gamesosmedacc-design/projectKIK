@@ -2,10 +2,10 @@ from sqlalchemy import Column, Integer, String, Enum, ForeignKey, Date, UniqueCo
 from datetime import datetime
 from zoneinfo import ZoneInfo
 from sqlalchemy.orm import relationship
-from utils.tools.users import users
+from utils.tools.users import User
 from utils.tools.database import base
 
-class attendance(base):
+class Attendance(base):
     __tablename__ = "attendance"
     id = Column(Integer, primary_key=True)
     users_id = Column(Integer, ForeignKey("users.id"), nullable=False)
@@ -15,9 +15,9 @@ class attendance(base):
     user_longitude = Column(String(), nullable=True)
     file_url = Column(String(), nullable=True)
     reason = Column(String(), nullable=True)
-    date_insert = Column(Date, nullable=False, default = lambda: datetime.now(ZoneInfo("Asia/Makassar")).date())
+    date_insert = Column(Date, nullable=True, default = lambda: datetime.now(ZoneInfo("Asia/Makassar")).date())
 
-    user = relationship("users", backref="attendance")
+    user = relationship("User", backref="attendance")
     __table_args__ = (
         UniqueConstraint("users_id", "date_insert", name="unique_attendance_per_day"),
     )
