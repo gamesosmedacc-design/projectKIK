@@ -52,6 +52,7 @@ main {
     display: flex;
     flex-direction: column;
     height: 100vh;
+    width: 100vw;
 }
 
 nav {
@@ -90,7 +91,7 @@ nav button {
 #cards-container {
     margin: 70px 12px 0px 12px;
     display: flex;
-    gap: 12px;
+    gap: 24px;
     flex-wrap: wrap ;
 }
 

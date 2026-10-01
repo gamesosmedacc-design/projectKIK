@@ -241,7 +241,7 @@ def whoami():
 @login_required
 def wheremyclass():
     data = get_groups_from_database()
-    user_id = session["session_Id"]
+    user_id = session["session_id"]
     
     if not user_id:
         return jsonify({"success":False, "message":"login atau sesi telah habis"}), 400
@@ -281,7 +281,6 @@ def myabsent():
         data_file_url = None
         data_reason = None
 
-
         if not data_status:
             return jsonify({"success":False, "message":"maaf status kamu tidak diketahui"})
 
@@ -295,7 +294,7 @@ def myabsent():
         data_photo_url = save_to_uploads(data_base64, user_id, data_today)
         
         if distance_from_center[0] or distance_from_center[1] or distance_from_center[2]:
-            if current_time > late_limit :
+            if current_time < late_limit :
                 data_status = "Terlambat"
                 user_absent(user_id, data_status, data_photo_url, data_latitude, data_longitude, data_file_url, data_reason)
                 return jsonify({"success":True, "message":"kehadiranmu tetap dicatat dengan status terlambat!"})
