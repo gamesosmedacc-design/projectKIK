@@ -10,6 +10,7 @@ from utils.helper.signIn import check_user_data
 from utils.helper.signUp import insert_user_data
 from utils.helper.get_from_database import get_from_database
 from utils.helper.get_groups_from_databse import get_groups_from_database
+from utils.helper.get_student_inclass import get_student_perperson
 from utils.helper.userAbsent import user_absent
 from utils.helper.savePhoto import save_to_uploads
 from utils.helper.haversine import haversine_formula
@@ -258,6 +259,36 @@ def wheremyclass():
         ]
     })
 
+@app.route("/sendtargetclass", methods=["POST"])
+@login_required
+def targetclass(): 
+    data = request.get_json()
+    session["targetclass"] = data.get("target")
+    print(session["targetclass"])
+
+    return jsonify({"success":True, "message":"target didapat"}), 200
+
+
+@app.route("/gettargetclass", methods={"GET"})
+@login_required
+def targetname():
+    targetclass = session.get("targetclass")
+
+    if not targetclass:
+        return jsonify({"success":True, "message":"kelas yang ingin kamu tuju tidak terdefinisi"}), 400
+
+    student_data = get_student_perperson(targetclass)
+    list_students = [
+        {
+            "id": user.id,
+            "NIS": user.nis,
+            "name": user.username,
+            "class_": user.class_,
+            "status": status if status else "Tidak absen"
+        }
+        for user, status in student_data
+    ]
+    return jsonify({"success":True, "list_student": list_students}), 200
 
 @app.route("/present", methods=['POST'])
 @login_required
@@ -268,8 +299,8 @@ def myabsent():
     now = datetime.now()
     current_time = now.time()
     rn = datetime.now(ZoneInfo("Asia/Makassar"))
-    data_today = datetime.now(ZoneInfo("Asia/Makassar")).date()
     late_limit = rn.time()
+    data_today = datetime.now(ZoneInfo("Asia/Makassar")).date()
 
     if not user_id:
         return jsonify({"success":False, "message":"login atau sesi telah habis"}), 400
@@ -305,10 +336,24 @@ def myabsent():
     user_absent(user_id, data_status, data_photo_url, data_latitude, data_longitude, data_file_url, data_reason)
     return jsonify({"success":True, "message":"finally you did it"})
 
-@app.route("/sickorexc", methods=["POST"])
-def absentdispresent():
-    data = request.get_json()
-    data_status = data.get("data_status")
+# @app.route("/sickorexc", methods=["POST"])
+# def absentdispresent():
+#     data = request.get_json()
+#     user_id = session["session_id"]
+#     data_status = data.get("data_status")
+#     now = datetime.now()
+#     current_time = now.time()
+#     rn = datetime.now(ZoneInfo("Asia/Makassar"))
+#     late_limit = rn.time()
+#     data_today = datetime.now(ZoneInfo("Asia/Makassar")).date()
+
+#     if not data_status:
+#         return jsonify({"success":False, "message":"status yang kamu pilih tidak terdefinisi"})
+
+#     if data_status == "Sakit":
+#         if current_time < late_limit:
+#             data_status = "Alpa"
+#             user_absent(user_id, data_status)
 
     # elif data_status == "Sakit" or data_status == "Izin":
     #     photo_url = None

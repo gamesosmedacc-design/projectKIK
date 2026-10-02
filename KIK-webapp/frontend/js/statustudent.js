@@ -14,21 +14,45 @@ document.addEventListener("DOMContentLoaded", async () => {
             
             classes[group.class].push(group)
         });
-        console.log(classes)
+        let card_content ="";
         for (const class_ in classes) {
-            cards.innerHTML += `
-                <div class="cards">
-                    <img src="assets/icon/users-solid (1).png" alt="">
-                    <p>${class_}</p>
-                </div>
-            `
+            card_content += `
+            <div class="cards">
+                <img src="assets/icon/users-solid (1).png">
+                <p class="target">${class_}</p>
+            </div>`
         }
-    }
+
+        cards.innerHTML = card_content;
+
+        cards.addEventListener("click", async (e) => {
+            const clicke = e.target.closest(".cards")
+
+            if (!clicke) return;
+
+            const cardes = cards.querySelectorAll(".cards")
+            cardes.forEach(card => {
+                card.classList.remove("active");
+            });
+
+            clicke.classList.add("active")
+
+            const target = clicke.querySelector(".target").textContent;
+            const data_target = await api_requests("/sendtargetclass", "POST", {target})
+            if (data_target.success) {
+                alert("ok data terkirim")
+                window.location.href = "classgroup.html";
+            } else {
+                alert(data_target.message)
+            }
+        })
+    };
 })
 
-document.getElementById("dashboard-page").addEventListener("click", (e) => {
+const dashboard_btn = document.getElementById("dashboard-page")
+dashboard_btn.addEventListener("click", (e) => {
     e.preventDefault();
 
     alert("kembali ke dashboard...");
-    window.location.href = "dashboard.html";
+    widow.location.href = "dashboard.html";
 })

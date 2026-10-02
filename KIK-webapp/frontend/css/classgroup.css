@@ -1,0 +1,102 @@
+@font-face {
+    font-family: 'jetbrains';
+        src: url("../assets/fonts/Outfit-Regular.ttf") format("truetype");
+        font-weight: normal;
+        font-style: normal;
+    
+    font-family: 'josefin';
+        src: url("../assets/fonts/Outfit-Bold.ttf") format("truetype");
+        font-weight: normal;
+        font-style: normal;
+}
+
+
+
+:root {
+    --base: #CFDBD5;
+    --primary: #333533;
+    --surface:  #242423;
+    --accents: #F5CB5C;
+    --secondary: #E8EDDF;
+
+    --detail: linear-gradient(135deg, #4dbc0d, #3E8914);
+    --detail1: linear-gradient(135deg, #4c06d6,#3a0aa9);
+    --detail2: linear-gradient(135deg, #e81717, #a50c0c);
+    --detail3: linear-gradient(135deg, #f59709, #ca5a0a);
+    --detail4: linear-gradient(135deg, #0a0c0a, #242432);
+}
+
+@keyframes background_animation {
+    0% { background-position: 0% 50%;}
+    50% { background-position: 100% 50%;}
+    100% { background-position: 0% 50%;}
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0px;
+    font-family: "josefin";
+    color: var(--base);
+    height: 100vh;
+    background: var(--detail4);
+    animation: background_animation 8s linear infinite;
+    background-size: 400% 400%;
+    background-repeat: no-repeat;
+}
+
+table {
+    background-color: var(--surface);
+    border: 2px solid var(--accents);
+    width: 100vw;
+    text-align: center;
+    border-collapse: collapse;
+}
+
+th {
+    border: 2px solid var(--accents);
+    background: var(--primary);
+    text-align: center;
+    height: 40px;
+}
+
+td {
+    border: 2px solid var(--accents);
+    height: 25px;
+}
+
+#top-nav {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100vw;
+    background: var(--surface);
+    margin: 0px;
+}
+
+#top-nav img {
+    width: 30px;
+    height: 30px;
+    margin-right: 12px;
+}
+
+#top-nav img:active {
+    cursor: progress;
+}
+
+#top-nav button {
+    font-family: "josefin";
+    background-color: var(--primary);
+    color: var(--base);
+    padding: 8px;
+    border: 2px solid var(--accents);
+    border-radius: 8px;
+    margin:12px;
+}
+
+#top-nav button:active{
+    background-color: var(--base);
+    color: var(--primary);
+}
