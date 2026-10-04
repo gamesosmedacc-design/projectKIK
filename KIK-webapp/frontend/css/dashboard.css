@@ -95,7 +95,6 @@
         border-radius: 50px;
         transform: scale(1);
         transition: 0.3s ease;
-        border: 2px solid var(--accents);
     }
     
     #top_navigation_bar #profile_pict:hover {
@@ -214,7 +213,7 @@
 
     #additional .items{
         border-radius: 12px;
-        min-width: 120px;
+        min-width: 250px;
         min-height: 100px;
         display: flex;
         justify-content: center;
@@ -236,96 +235,12 @@
         background: var(--detail7);
         border: 2px solid #16d693;
         border-radius: 12px;
-
-
-
-    /* #schedule_info {
+        min-width: 250px;
+        min-height: 50px;
         display: flex;
-        margin-bottom: auto;
-        flex: 1;
-        flex-direction: column;
         align-items: center;
-        border: 2px solid ;
-        border-radius: 12px;
-    }
-
-    #schedule_info #current_time {
-        display: flex;
-        margin-right: auto ;
-        padding: 12px 8px;
-        font-size: 16px;
-        width: 100%;
-    }
-
-    #schedule_info #current_subject_teacher {
-        display: flex;
-        margin-right: auto;
-        padding:12px;
-        width: 100%;
-        flex-direction: column;
-        gap: 8px;
-    }
-
-    #schedule_info #current_teacher {
-        display: flex;
-        width: 100%;
-        margin-right:auto ;
-        padding: 0px 6px;
-        font-size: 16px;
-        align-items: center;
-        gap: 12px;
-    }
-
-    #schedule_info #pp_guru {
-        width: 100%;
-        max-width: 20px;
-        height: 100%;
-        max-height: 20px;
-        opacity: 0.4;
-        border-radius: 50%;
-    }
-    
-    #schedule_info #next_info {
-        display: flex;
-        flex-direction: column;
-        font-size: 14px;
-        /* margin-left: auto; */
-        padding: 8px 12px ;
-        gap: 8px; 
-    }
-
-    #info_time_subject {
-        display: flex;
-        /* flex-direction: column; */
-        justify-content: space-between;
-        padding: 4px;
-        /* background-color: red; */
-        border-top: 1px solid var(--base);
-        font-size: 12px;
-        gap: 2px;
-    }
-    
-    #info_time_subject #next_time {
-        /* background-color: black; */
-        min-width: 80px;
-        display: flex;
         justify-content: center;
     }
-
-    #info_time_subject #next_subject {
-        /* background-color: blue */
-        max-width: 200px;
-        text-align: right;
-    }
-
-    #next_teacher {
-        font-size: 12px;
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        margin-left: auto;
-        gap: 12px;
-    } */
 
     #right_sheet_container {
         width: 200px;
@@ -339,7 +254,7 @@
         margin: 0;
         margin-left: auto;
         top: 0;
-        height: 100vh;
+        /* height: 100vh; */
         animation: slide_right_to_left 0.3s ease;
         justify-content: center;
         z-index: 2000;
@@ -361,6 +276,7 @@
         gap: 12px;
         align-items: center;
         font-size: 16px;
+        padding-bottom: 12px;
         font-family: 'jetbrains', monospace;
     }
 
@@ -373,6 +289,7 @@
         border-radius: 24px;
         border: 2px solid var(--secondary);
         align-items: center;
+        gap: 12px;
         justify-content: center;
         transition: 0.3s ease;
     }
@@ -385,7 +302,7 @@
     }
 
     #right_nav_sheet #logout-btn {
-        color: black;
+        color: var(--base);
         display: flex;
         background-color: #f11;
         width: 90%;
@@ -393,6 +310,7 @@
         border-radius: 24px;
         border: 2px solid #900;
         align-items: center;
+        gap: 12px;
         justify-content: center;
     }
 
@@ -401,5 +319,10 @@
         background-color: #900;
         border: 2px solid #f11;
         color: white;
+    }
+
+    #right_nav_sheet img {
+        max-width: 30px;
+        max-height: 30px;
     }
 }

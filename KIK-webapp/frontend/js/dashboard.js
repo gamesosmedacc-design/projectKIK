@@ -1,3 +1,5 @@
+
+
 const right_nav_sheet = document.getElementById("right_nav_sheet");
 const wrapper_section = document.getElementById("right_sheet_container");
 
@@ -23,6 +25,38 @@ document.addEventListener("DOMContentLoaded", async () => {
         console.error("Error", error);
         window.location.href = "login.html";
     }
+
+    try {
+        const announcement_box = document.getElementById("announcement")
+        const data_absen = await api_get("/getmyattendance", "GET");
+        if (data_absen.success) {            
+            const status = data_absen.data_absen.status;
+            if (status === "Sakit") {
+                announcement_box.textContent = "Get Well Soon ya!";
+            } 
+            if (status === "Hadir") {
+                announcement_box.textContent = "Sip sudah absen!";
+            }
+            if (status === "Izin") {
+                announcement_box.textContent = "Oke sudah absen!";
+            }
+
+            
+        } else {
+            announcement_box.textContent = "absen dulu yukk?";
+            announcement_box.style.background = "var(--detail2)";
+            announcement_box.style.borderColor = "red"
+        }
+        
+        if (data_absen.message === "weekend") {
+            announcement_box.textContent = "Hari ini libur";
+            announcement_box.style.background = "var(--detail)";
+            announcement_box.style.borderColor = "green"
+        }
+
+    } catch (error) {
+        console.error("error", error)
+    }
 })
 
 async function my_name() {
@@ -35,9 +69,15 @@ async function my_name() {
         const role = user.role;
         const class_ = user.class_;
         const subject = user.subject;
+        const summary = user.summary;
+
+        document.getElementById("hadir-count").textContent = summary["Hadir"] || 0;
+        document.getElementById("sakit-count").textContent = summary["Sakit"] || 0;
+        document.getElementById("izin-count").textContent = summary["Izin"] || 0;
 
         document.getElementById("greetings").textContent = name;
         document.getElementById("name").textContent = name;
+
         if(class_) {
             document.getElementById("class_").textContent = class_;
         }
@@ -63,7 +103,20 @@ async function my_name() {
     }
 };
 
+async function myattendance() {
+    try {
+        const data = await api_get("/getmyattendance", "GET");
+        if (data.success) {
+        } else {
+            console.error('Error', data.message)
+        }
+    } catch (error) {
+        console.error("Error", error)
+    }
+}
+
 my_name();
+myattendance();
 
 
 bar_btn.addEventListener("click", (e) => {
@@ -83,39 +136,28 @@ wrapper_section.addEventListener("click", (e)=> {
 absent_btn.addEventListener("click", (ex) => {
     ex.preventDefault();
 
-    alert("ke halaman absen...");
     window.location.href = "absent.html";
 });
 
-achievement_btn.addEventListener("click", (ea) => {
-    ea.preventDefault();
-    
-    alert("masih dalam tahap development sabar ya...");
-})
 point_btn.addEventListener("click", (ea) => {
     ea.preventDefault();
 
-    alert("ke halaman poin...");
     window.location.href = "point.html";
 })
 status_student_btn.addEventListener("click", (ea) => {
     ea.preventDefault();
 
-    alert("ke halaman status siswa");
     window.location.href = "statustudent.html";
 })
-history_btn.addEventListener("click", (ea) => {
+logout_btn.addEventListener("click", async (ea) => {
     ea.preventDefault();
-
-    alert("masih dalam tahap development sabar ya...");
-})
-settings_btn.addEventListener("click", (ea) => {
-    ea.preventDefault();
-
-    alert("masih dalam tahap development sabar ya...");
-})
-logout_btn.addEventListener("click", (ea) => {
-    ea.preventDefault();
-
-    alert("masih dalam tahap development sabar ya...");
+    try {
+        const data = await api_get("/logout", "GET")
+        if (data.success) {
+            alert(data.message)
+            window.location.href = "login.html"
+        }
+    } catch (error) {
+        console.error("error", error)
+    }
 })

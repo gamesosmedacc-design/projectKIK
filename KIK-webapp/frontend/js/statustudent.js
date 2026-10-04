@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", async () => {
-    // alert("dalam tahap pengembangan");
     const data = await api_get("/wheremyclass", "GET")
 
     if(data.success) {
@@ -40,7 +39,6 @@ document.addEventListener("DOMContentLoaded", async () => {
             const target = clicke.querySelector(".target").textContent;
             const data_target = await api_requests("/sendtargetclass", "POST", {target})
             if (data_target.success) {
-                alert("ok data terkirim")
                 window.location.href = "classgroup.html";
             } else {
                 alert(data_target.message)
@@ -55,4 +53,19 @@ dashboard_btn.addEventListener("click", (e) => {
 
     alert("kembali ke dashboard...");
     widow.location.href = "dashboard.html";
+})
+
+
+document.addEventListener("DOMContentLoaded", async () => {
+    try {
+        const data = await api_get("/dashboard", "GET");
+        if (data.success) {
+        } else {
+            alert("sesi telah berakhir kembali ke halaman login");
+            window.location.href = "login.html";
+        }
+    } catch (error) {
+        console.error("Error", error);
+        window.location.href = "login.html";
+    }
 })

@@ -94,13 +94,15 @@ body {
         transition: 0.5s ease;
     }
 
-    #login_box input::placeholder{
+    #login_box input::placeholder,
+    #register_box input::placeholder{
         color: gray;
         font-size: 12px;
         transition: 0.5s ease;
     }
     
-    #login_box input:focus::placeholder{
+    #login_box input:focus::placeholder,
+    #register_box input:focus::placeholder{
         font-size: 14px;
         transition: 0.5s ease;
     }

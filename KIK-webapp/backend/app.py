@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, session
+from flask import Flask, request, jsonify, session, redirect, url_for
 from zoneinfo import ZoneInfo
 from sqlalchemy.exc import IntegrityError
 from utils.tools.database import Session_local
@@ -6,11 +6,17 @@ from flask_cors import CORS
 from utils.tools.database import base, engine
 from utils.tools.attendance import Attendance
 from utils.tools.users import User
+from utils.tools.point import Point
 from utils.helper.signIn import check_user_data
 from utils.helper.signUp import insert_user_data
 from utils.helper.get_from_database import get_from_database
 from utils.helper.get_groups_from_databse import get_groups_from_database
 from utils.helper.get_student_inclass import get_student_perperson
+from utils.helper.check_my_attendance import check_my_attendance
+from utils.helper.get_my_summary import get_my_summary
+from utils.helper.get_student_point import check_students_point
+from utils.helper.get_my_point import get_my_point
+from utils.helper.point_increment import insert_point
 from utils.helper.userAbsent import user_absent
 from utils.helper.savePhoto import save_to_uploads
 from utils.helper.haversine import haversine_formula
@@ -19,7 +25,10 @@ from dotenv import load_dotenv
 from functools import wraps
 import os, bcrypt, re
 
+
 load_dotenv()
+
+base.metadata.create_all(bind=engine)
 
 def login_required(f):
     @wraps(f)
@@ -132,11 +141,22 @@ def sign_up():
 
     if data_role == "Guru":
         if data_subject == "":
-            return jsonify({"succes":False, "message":"mapel tidak boleh kosong"}), 400
+            return jsonify({"success":False, "message":"mapel tidak boleh kosong"}), 400
 
         if re.fullmatch(number_regex, data_subject):
             return jsonify({"success":False, "message":"biasanya mapel atau proli tidak mengandung angka"}), 400
         
+
+        if not data_nis:
+            return jsonify({"success":False, "message":"NIP tidak boleh kosong"}), 400
+
+        if not data_nis.isdigit():
+            return jsonify({"success":False, "message":"NIP harus berisikan angka"}), 400
+        
+        if len(data_nis) != 18:
+            return jsonify({"success":False, "message":"NIP harus 18 digit"}), 400
+
+
         data_class = None
 
     elif data_role == "Murid":
@@ -154,6 +174,16 @@ def sign_up():
         if not re.fullmatch(major_regex, class_part[1]):
             return jsonify({"success":False, "message":"format jurusan salah gunakan <TP|TKR|TKJ|TKP|ALDP|ATPH|DPIB>"}), 400
 
+        if not data_nis:
+            return jsonify({"success":False, "message":"NIS tidak boleh kosong"}), 400
+
+        if not data_nis.isdigit():
+            return jsonify({"success":False, "message":"NIS harus berisikan angka"}), 400
+        
+        if len(data_nis) != 4:
+            return jsonify({"success":False, "message":"NIS harus 4 digit"}), 400
+        
+
         data_subject = None
     # class & role ==============================================
 
@@ -167,23 +197,6 @@ def sign_up():
 
 
     # email =====================================================
-
-    # nis =======================================================
-    
-    if data_nis:
-        if data_nis == "":
-            return jsonify({"success":False, "message":"nis tidak boleh kosong"}), 400
-
-        if re.search(char_regex, data_nis):
-            return jsonify({"success":False, "message":"kamu yakin itu nis kamu?"}), 400
-
-        if len(data_nis) > 4:
-            return jsonify({"success":False, "message":"nis biasanya hanya 4 digit saja"}), 400
-
-        if not re.fullmatch(number_regex, data_nis):
-            return jsonify({"success":False, "message":"kamu harus menggunakan angka untuk nis kamu"}), 400
-        
-    # nis =======================================================
 
     # phone number ==============================================
     
@@ -206,7 +219,7 @@ def sign_up():
         session["session_id"] = data.id
 
     except IntegrityError:
-            return jsonify({"success":False, "message":"username sudah digunakan"})
+            return jsonify({"success":False, "message":"username atau NIS atau NIP sudah digunakan"})
 
     return jsonify({"success":True, "message":"sejauh ini masih benar"}), 200
 
@@ -229,14 +242,37 @@ def whoami():
         return jsonify({"success":False, "message":"login atau sesi telah habis"}), 400
 
     data = get_from_database(user_id)
+    data_summary = get_my_summary(user_id)
     data_lengkap = {
         "name":data.call_name,
         "role":data.role,
         "subject":data.subject,
         "class_":data.class_,
+        "summary":data_summary
     }
-    print(f"user dengan nama = {data.username}, kelas {data.class_}, ditemukan!")
     return jsonify({"success":True, "message":"selamat datang kembali!", "data":data_lengkap}), 200
+
+
+@app.route("/getmyattendance", methods=["GET"])
+def amiabsent():
+    user_id = session["session_id"]
+    rn = datetime.now(ZoneInfo("Asia/Makassar"))
+    dayname = rn.strftime("%A")
+
+    if not user_id:
+        return jsonify({"success":False, "message":"login atau sesi telah berakhir silakan login ulang"}), 400
+
+    if dayname == "Saturday" or dayname == "Sunday":
+        return jsonify({"success":False, "message":"weekend"}), 200
+
+    data_absen = check_my_attendance(user_id)
+    if not data_absen :
+        return jsonify({"success":False, "message":"kamu belum absen"}), 400
+
+    return jsonify({
+        "success":True,
+        "data_absen" : data_absen
+    }), 200
 
 @app.route("/wheremyclass", methods={"GET"})
 @login_required
@@ -278,13 +314,15 @@ def targetname():
         return jsonify({"success":True, "message":"kelas yang ingin kamu tuju tidak terdefinisi"}), 400
 
     student_data = get_student_perperson(targetclass)
+    point_data = check_students_point(targetclass)
     list_students = [
         {
             "id": user.id,
             "NIS": user.nis,
             "name": user.username,
             "class_": user.class_,
-            "status": status if status else "Tidak absen"
+            "status": status if status else "Tidak absen",
+            "total_point": point_data.get(user.id, 0) if point_data.get(user.id, 0) else 0
         }
         for user, status in student_data
     ]
@@ -296,14 +334,17 @@ def myabsent():
     data = request.get_json()
     user_id = session["session_id"]
     data_status = data.get("data_status")
-    now = datetime.now()
-    current_time = now.time()
     rn = datetime.now(ZoneInfo("Asia/Makassar"))
-    late_limit = rn.time()
+    dayname = rn.strftime("%A")
+    current_time = rn.time()
+    late_limit = time(7, 30, 0)
     data_today = datetime.now(ZoneInfo("Asia/Makassar")).date()
 
     if not user_id:
         return jsonify({"success":False, "message":"login atau sesi telah habis"}), 400
+
+    if dayname == "Saturday" or dayname == "Sunday":
+        return jsonify({"success":False, "message":"weekend"}), 200
 
     if data_status == "Hadir":
         data_base64 = data.get("data_b64_selfie")
@@ -312,122 +353,125 @@ def myabsent():
         data_file_url = None
         data_reason = None
 
-        if not data_status:
-            return jsonify({"success":False, "message":"maaf status kamu tidak diketahui"})
-
         if not data_latitude:
-            return jsonify({"success":False, "message":"maaf lokasi kamu tidak diketahui"})
+            return jsonify({"success":False, "message":"maaf lokasi kamu tidak diketahui"}), 400
         
         if not data_longitude:
-            return jsonify({"success":False, "message":"maaf lokasi kamu tidak diketahui"})
+            return jsonify({"success":False, "message":"maaf lokasi kamu tidak diketahui"}), 400
 
         distance_from_center = haversine_formula(data_latitude, data_longitude)
-        data_photo_url = save_to_uploads(data_base64, user_id, data_today)
         
         if distance_from_center[0] or distance_from_center[1] or distance_from_center[2]:
-            if current_time < late_limit :
+            data_photo_url = save_to_uploads(data_base64, user_id, data_today)
+            
+            if current_time > late_limit :
                 data_status = "Terlambat"
+                point = 5
                 user_absent(user_id, data_status, data_photo_url, data_latitude, data_longitude, data_file_url, data_reason)
+                insert_point(user_id, point, category=data_status)
                 return jsonify({"success":True, "message":"kehadiranmu tetap dicatat dengan status terlambat!"})
 
-        elif not distance_from_center[0] or distance_from_center[1] or distance_from_center[2] :
-            return jsonify({"success":False, "message":"kamu berada di luar area"})
+            else :
+                user_absent(user_id, data_status, data_photo_url, data_latitude, data_longitude, data_file_url, data_reason)
+                return jsonify({"success":True, "message":"finally you did it"}), 400
+                
+        else :
+            return jsonify({"success":False, "message":"kamu berada di luar area"}), 400
 
-    user_absent(user_id, data_status, data_photo_url, data_latitude, data_longitude, data_file_url, data_reason)
     return jsonify({"success":True, "message":"finally you did it"})
 
-# @app.route("/sickorexc", methods=["POST"])
-# def absentdispresent():
-#     data = request.get_json()
-#     user_id = session["session_id"]
-#     data_status = data.get("data_status")
-#     now = datetime.now()
-#     current_time = now.time()
-#     rn = datetime.now(ZoneInfo("Asia/Makassar"))
-#     late_limit = rn.time()
-#     data_today = datetime.now(ZoneInfo("Asia/Makassar")).date()
+@app.route("/nfworexcattendance", methods=["POST"])
+def absentdispresent():
+    data = request.get_json()
+    user_id = session["session_id"]
+    data_status = data.get("status")
+    rn = datetime.now(ZoneInfo("Asia/Makassar"))
+    current_time = rn.time()
+    dayname = rn.strftime("%A")
+    late_limit = time(7, 30, 0)
+    data_today = datetime.now(ZoneInfo("Asia/Makassar")).date()
 
-#     if not data_status:
-#         return jsonify({"success":False, "message":"status yang kamu pilih tidak terdefinisi"})
+    if not user_id :
+        return jsonify({"success":False, "message":"login atau sesi terlah berakhir"}), 400
 
-#     if data_status == "Sakit":
-#         if current_time < late_limit:
-#             data_status = "Alpa"
-#             user_absent(user_id, data_status)
-
-    # elif data_status == "Sakit" or data_status == "Izin":
-    #     photo_url = None
-    #     data_latitude = data.get("data_latitude")
-    #     data_longitude = data.get("data_longitude")
-    #     data_file_url = data.get("data_file_url")
-    #     data_reason = data.get("data_reason")
-
-    #     if current_time > late_limit :
-    #         data_status = "Alpa"
-    #         user_absent(user_id, data_status, photo_url, data_latitude, data_longitude, data_file_url, data_reason)
-    #         return jsonify({"success":True, "message":"kamu terlambat untuk mengirim informasi"})
-
-    #     else :
-    #         user_absent(user_id, data_status, photo_url, data_latitude, data_longitude, data_file_url, data_reason)
-    #         return jsonify({"success":True, "message":"informasimu sudah tercatat"})
-
-    # else :
-    #     return jsonify({"success":True, "message":"maaf status kamu tidak terdefinisi"}), 201
-
-    # elif data_status == "Izin":
-    #     photo_url = None
-    #     data_latitude = data.get("data_latitude")
-    #     data_longitude = data.get("data_longitude")
-    #     file_url = data.get("data_file_url")
-    #     reason = data.get("data_reason")
-
-    #     if current_time > late_limit :
-    #         data_status = "Alpa"
-    #         user_absent(user_id, data_status, photo_url, data_latitude, data_longitude, file_url, reason)
-    #         return jsonify({"success":True, "message":"kamu terlambat untuk mengirim informasi"})
-
-    #     else :
-    #         user_absent(user_id, data_status, photo_url, data_latitude, data_longitude, file_url, reason)
-    #         return jsonify({"success":True, "message":"informasimu sudah tercatat"})
-# @app.route("/absent", methods=['POST'])
-# def absent():
-#     data = request.get_json()
-#     user_id = session.get("id")
-#     print(user_id)
-
-#     if not user_id :
-#         return jsonify({"success":False, "message":"cannot reach BE"}), 400
+    if not data_status :
+        return jsonify({"success":False, "message":"maaf status kamu tidak diketahui"}), 400
     
-#     user_latitude_position = float(data.get("user_latitude"))
-#     user_longitude_position = float(data.get("user_longitude"))
-#     user_status = data.get("data_status")
-#     user_comment = data.get("comment")
+    if dayname == "Saturday" or dayname == "Sunday":
+        return jsonify({"success":False, "message":"weekend"}), 200
 
-#     distance_from_center = haversine_formula(user_latitude_position, user_longitude_position)
+    if data_status == "Sakit":
+        reason = data.get("reason")
+        file_nfw = data.get("nfw_file")
+        data_longitude = None
+        data_latitude = None
+        data_photo = None
 
-#     if current_time < absent_open or current_time > absent_close :
-#         return jsonify({"succes":False, "message":"this feature is cannot use right now"})
+        if not file_nfw:
+            return jsonify({"success":False, "message":"file kamu kosong"}), 400
 
-#     if user_status == None :
-#         return jsonify({"success":False, "message":"please enter your status"}), 400
+        if not reason:
+            return jsonify({"success":False, "message":"berikan alasan anda"}), 400
 
-#     if user_status == "hadir":
-#         if distance_from_center[1] or distance_from_center[1] or distance_from_center[2]:
-#             if current_time > absent_late:
-#                 user_status = "terlambat"
-#                 user_absent(user_id, user_status, user_comment, user_latitude_position, user_longitude_position)
-#                 return jsonify({"succes":False, "message":"attendance was logg, pls confirm to your teacher"})
-    
-#     if user_status == "sakit" or user_status == "izin" or user_status == "dispen":
-#         if user_comment == " " :
-#             return jsonify({"success":False, "message":"please enter your reason"}), 400
+        data_file_nfw = save_to_uploads(file_nfw, user_id, data_today)
 
-#         else : 
-#             user_absent(user_id, user_status, user_comment, user_latitude_position, user_longitude_position)
-#             return jsonify({"success":True, 'message':"get well soon"}), 200
+        if current_time > late_limit:
+            data_status = "Alpa"
+            point = 5
+            user_absent(user_id, data_status, data_photo, data_latitude, data_longitude, data_file_nfw ,reason)
+            insert_point(user_id, point, category=data_status)
+            return jsonify({"success":True}), 200
 
-#     user_absent(user_id, user_status, user_comment, user_latitude_position, user_longitude_position)
-#     return jsonify({"success":True, "message":"finally you did it"}), 200
+        else :
+            user_absent(user_id, data_status, data_photo, data_latitude, data_longitude, data_file_nfw, reason)
+            return jsonify({"success":True}), 200
+
+    if data_status == "Izin":
+        reason = data.get("reason")
+        file_nfw = data.get("nfw_file")
+        data_longitude = None
+        data_latitude = None
+        data_photo = None
+
+        if not file_nfw:
+            return jsonify({"success":False, "message":"file kamu kosong"}), 400
+
+        if not reason:
+            return jsonify({"success":False, "message":"berikan alasan anda"}), 400
+
+        data_file_nfw = save_to_uploads(file_nfw, user_id, data_today)
+
+        if current_time > late_limit:
+            data_status = "Alpa"
+            point = 5
+            user_absent(user_id, data_status, data_photo, data_latitude, data_longitude, data_file_nfw ,reason)
+            insert_point(user_id, point, category=data_status)
+            return jsonify({"success":True}), 200
+
+        else :
+            user_absent(user_id, data_status, data_photo, data_latitude, data_longitude, data_file_nfw, reason)
+            return jsonify({"success":True}), 200
+
+    return jsonify({"success":False}), 400
+
+@app.route("/getmypoint", methods=["GET"])
+def mypoint():
+    user_id = session["session_id"]
+    if not user_id:
+        return jsonify({"success":False, "message":"sesi telah berakhir"}), 400
+
+    point = get_my_point(user_id)
+
+    if point is None:
+        return jsonify({"success":False, "message":"ada yang salah dengan server"}), 400
+
+    return jsonify({"success":True, "total_point":point}), 200
+
+@app.route("/logout", methods=["GET"])
+def logout():
+    session.clear()
+
+    return jsonify({"success":True, "message":"berhasil logout"}), 200
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))

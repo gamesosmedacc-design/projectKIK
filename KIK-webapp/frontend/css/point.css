@@ -1,27 +1,104 @@
+@font-face {
+    font-family: 'jetbrains';
+    src: url("../assets/fonts/Outfit-Regular.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+
+    font-family: 'josefin';
+    src: url("../assets/fonts/Outfit-Bold.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+}
+
+* {
+    font-family: 'josefin' ;
+}
+
+:root {
+    --base: #CFDBD5;
+    --primary: #333533;
+    --surface:  #242423;
+    --accents: #F5CB5C;
+    --secondary: #E8EDDF;
+
+    --detail: linear-gradient(135deg, #4dbc0d, #3E8914);
+    --detail1: linear-gradient(135deg, #4c06d6,#3a0aa9);
+    --detail2: linear-gradient(135deg, #e81717, #a50c0c);
+    --detail3: linear-gradient(135deg, #f59709, #ca5a0a);
+    --detail4: linear-gradient(135deg, #0a0c0a, #242432);
+    --detail5: linear-gradient(135deg, #2C8C99, #226973);
+    --detail6: linear-gradient(135deg, #EE4266, #96263f);
+    --detail7: linear-gradient(135deg, #23a068, #0c6d31);
+}
+@keyframes background_animation {
+    0% { background-position: 0% 50%;}
+    50% { background-position: 100% 50%;}
+    100% { background-position: 0% 50%;}
+}
+
 body {
-    margin: 0;
     display: flex;
+    flex-direction: column;
+    gap: 12px;
+    background: var(--detail4);
+    margin: 0;
+    height: 100vh;
+    animation: background_animation 5s linear infinite;
+    background-size: 400% 400%;
+    background-repeat: no-repeat;
     justify-content: center;
+    align-items: center;
 }
 
-table {
-    width: 95vw;
-    border-collapse: collapse;
+div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+    background-color: var(--primary);
+    border: 2px solid white;
+    border-radius: 24px;
+    min-width: 250px;
+    height: 300px;
+    gap: 12px;
 }
 
-tr {
+div p {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    border-radius: 50%;
+    font-size: 24px;
     text-align: center;
+    color: white;
+    border: 2px solid white;
+    min-width: 50px;
+    min-height: 50px;
 }
 
-th {
-    font-weight: 900;
+div span:not(#message-by-count-point) {
+    color: white;
+    width: 100%;
+    text-align: center;
+    border-bottom: 1px solid white;
+    padding: 4px;
 }
 
-#problem {
-    width: 85px;
+div #message-by-count-point {
+    color: white;
+    width: 100%;
+    text-align: center;
+    border-top: 1px solid white;
+    border-bottom: 1px solid white;
+    padding: 4px;
 }
 
-td {
-    width: 50px;
-    height: 35px;
+#dashboard-page {
+        background-color: var(--primary);
+        color: var(--base);
+        padding: 8px;
+        border: 2px solid var(--accents);
+        border-radius: 8px;
 }

@@ -147,15 +147,15 @@ document.getElementById("register_box").addEventListener("submit", async functio
     }
     
     // nis ===============================================================
-    if (nis_value === "") {
-        alert("Nis kamu belum ada");
-        return;
-    }
+    // if (nis_value === "") {
+    //     alert("Nis kamu belum ada");
+    //     return;
+    // }
 
-    if (char_regex.test(nis_value)) {
-        alert("kamu yakin itu nis kamu?");
-        return;
-    }
+    // if (char_regex.test(nis_value)) {
+    //     alert("kamu yakin itu nis kamu?");
+    //     return;
+    // }
 
     if (call_name_value === "") {
         alert("nama panggilan harus di isi");
@@ -178,6 +178,16 @@ document.getElementById("register_box").addEventListener("submit", async functio
             alert("Mata Pelajaran atau Proli tidak boleh menggunakan angka");
             return;
         }
+
+        if (nis_value === "") {
+            alert("NIP tidak boleh kosong")
+            return
+        }
+
+        if (nis_value.length !== 18) {
+            alert("NIP harus berisikan 18 angka")
+            return
+        }
     }
     
     if (role_value === "Murid"){
@@ -197,13 +207,22 @@ document.getElementById("register_box").addEventListener("submit", async functio
             alert("kelas tidak valid gunakan (X, XI, XII, 10, 11, 12)");
             return;
         }
-    
+        
         if (!major_regex.test(index_class[1])) {
             alert("jurusan tidak valid gunakan (TP, TKJ, TKR, TKP, ALDP, ATPH, DPIB)");
             return;
         }
+        if (nis_value === "") {
+            alert("NIS tidak boleh kosong")
+            return
+        }
+    
+        if (nis_value.length !== 4) {
+            alert("NIS harus berisikan 4 angka")
+            return
+        }
     }
-
+    
     // email =============================================================
     if (email_value === "") {
         alert("email kamu belum ada");

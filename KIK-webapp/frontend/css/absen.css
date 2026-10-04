@@ -22,6 +22,15 @@
     --detail2: linear-gradient(135deg, #e81717, #a50c0c);
     --detail3: linear-gradient(135deg, #f59709, #ca5a0a);
     --detail4: linear-gradient(135deg, #0a0c0a, #242432);
+        --detail5: linear-gradient(135deg, #2C8C99, #226973);
+    --detail6: linear-gradient(135deg, #EE4266, #96263f);
+    --detail7: linear-gradient(135deg, #23a068, #0c6d31);
+}
+
+@keyframes background_animation {
+    0% { background-position: 0% 50%;}
+    50% { background-position: 100% 50%;}
+    100% { background-position: 0% 50%;}
 }
 
 * {
@@ -32,10 +41,21 @@ html {
     font-size: 16px
 }
 
-@keyframes background_animation {
-    0% { background-position: 0% 50%;}
-    50% { background-position: 100% 50%;}
-    100% { background-position: 0% 50%;}
+
+@keyframes slide_in {
+    from {
+        transform: translateY(50%);
+    } to {
+        transform: translateY(0%);
+    }
+}
+
+@keyframes fade_in {
+    from {
+        opacity: 0;
+    } to {
+        opacity: 100;
+    }
 }
 
 body {
@@ -54,7 +74,7 @@ body {
 
 @media(min-width: 360px) {
     main {
-        display: flex;
+        display: none;
         flex-direction: column;
         justify-content: center;
         align-items: center;
@@ -310,9 +330,6 @@ body {
     }
 
 
-
-
-
     main #excused-area {
         display: none;
         margin: 12px;
@@ -333,5 +350,86 @@ body {
         margin-top: 12px;
         max-width: 100px;
         border-radius: 12px;
+    }
+
+    #dialog-after-absent {
+        display: none;
+        color: var(--base);
+        flex-direction:column;
+        padding: 12px;
+        justify-content: center;
+        align-items: center;
+        background: var(--detail);
+        border: 2px solid #3E8914;
+        animation: slide_in 0.5s ease, fade_in 1s ease;
+        border-radius: 25px;
+        min-width: 200px;
+        gap: 12px;
+        min-height: 200px;
+        max-width: 300px;
+        max-height: 300px;
+    }
+
+    #dialog-after-absent img {
+        max-width: 100px;
+        border-radius: 50%;
+        border: 2px solid #4dbc0d;
+        padding: 2px;
+    }
+
+    #dialog-after-absent span {
+        border-top: 2px solid white;
+        padding: 2px;
+    }
+
+    #dialog-after-absent a {
+        text-decoration: none;
+        color: var(--base);
+    }
+
+    #dialog-after-absent a:active {
+        text-decoration: underline;
+        color: blue;
+        cursor: progress;
+    }
+    
+    #dialog-weekend {
+        display: flex;
+        color: var(--base);
+        flex-direction:column;
+        padding: 12px;
+        justify-content: center;
+        align-items: center;
+        background: var(--detail5);
+        border: 2px solid #3fccde;
+        animation: slide_in 0.5s ease, fade_in 1s ease;
+        border-radius: 25px;
+        min-width: 200px;
+        gap: 12px;
+        min-height: 200px;
+        max-width: 300px;
+        max-height: 300px;
+    }
+    
+    #dialog-weekend img {
+        max-width: 100px;
+        border-radius: 50%;
+        border: 2px solid #3fccde;
+        padding: 2px;
+    }
+
+    #dialog-weekend span {
+        border-top: 2px solid white;
+        padding: 2px;
+    }
+
+    #dialog-weekend a {
+        text-decoration: none;
+        color: var(--base);
+    }
+
+    #dialog-weekend a:active {
+        text-decoration: underline;
+        cursor: progress;
     }
 }
