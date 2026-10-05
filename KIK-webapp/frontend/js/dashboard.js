@@ -33,12 +33,14 @@ document.addEventListener("DOMContentLoaded", async () => {
             const status = data_absen.data_absen.status;
             if (status === "Sakit") {
                 announcement_box.textContent = "Get Well Soon ya!";
-            } 
-            if (status === "Hadir") {
+            } else if (status === "Hadir") {
                 announcement_box.textContent = "Sip sudah absen!";
-            }
-            if (status === "Izin") {
+            } else if (status === "Izin") {
                 announcement_box.textContent = "Oke sudah absen!";
+            } else if (status === "Terlambat") {
+                announcement_box.textContent = "Next jangan telat Ya!"
+            } else if (status === "alpa") {
+                announcement_box.textContent = "Nxt lebih tepat waktu"
             }
 
             

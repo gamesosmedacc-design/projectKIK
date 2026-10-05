@@ -394,7 +394,7 @@ body {
     }
     
     #dialog-weekend {
-        display: flex;
+        display: none;
         color: var(--base);
         flex-direction:column;
         padding: 12px;

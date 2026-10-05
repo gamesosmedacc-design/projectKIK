@@ -428,28 +428,28 @@ def absentdispresent():
 
     if data_status == "Izin":
         reason = data.get("reason")
-        file_nfw = data.get("nfw_file")
+        file_exc = data.get("exc_file")
         data_longitude = None
         data_latitude = None
         data_photo = None
 
-        if not file_nfw:
+        if not file_exc:
             return jsonify({"success":False, "message":"file kamu kosong"}), 400
 
         if not reason:
             return jsonify({"success":False, "message":"berikan alasan anda"}), 400
 
-        data_file_nfw = save_to_uploads(file_nfw, user_id, data_today)
+        data_file_exc = save_to_uploads(file_exc, user_id, data_today)
 
         if current_time > late_limit:
             data_status = "Alpa"
             point = 5
-            user_absent(user_id, data_status, data_photo, data_latitude, data_longitude, data_file_nfw ,reason)
+            user_absent(user_id, data_status, data_photo, data_latitude, data_longitude, data_file_exc ,reason)
             insert_point(user_id, point, category=data_status)
             return jsonify({"success":True}), 200
 
         else :
-            user_absent(user_id, data_status, data_photo, data_latitude, data_longitude, data_file_nfw, reason)
+            user_absent(user_id, data_status, data_photo, data_latitude, data_longitude, data_file_exc, reason)
             return jsonify({"success":True}), 200
 
     return jsonify({"success":False}), 400

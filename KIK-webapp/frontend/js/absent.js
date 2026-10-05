@@ -315,7 +315,7 @@ submit_exc.addEventListener("click", async () => {
     
     try {
         const exc_data = await api_requests("/nfworexcattendance", "POST", {status, reason, exc_file_file, data_longitude, data_latitude});
-        if (nfw_data.success) {
+        if (exc_data.success) {
             console.log("kamu sudah absen izin")
             dialog_after.style.display = "flex";
             main_container.style.display = "none";
