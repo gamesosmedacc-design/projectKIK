@@ -78,13 +78,23 @@
         </div>
     </main>
 
-    <div id="dialog-after-absent">
+    <div id="dialog-after-absent" class="dialog">
         <img src="assets/icon/circle-check-solid.png" alt="check">
         <span>kehadiranmu sudah dicatat</span>
         <a href="dashboard.html">kembali ke dashboard</a>
     </div>
+    <div id="dialog-pending" class="dialog">
+        <img src="assets/icon/hourglass-half-solid.png" alt="check">
+        <span>kehadiran Anda dalam proses</span>
+        <a>Silahkan Menunggu sebentar</a>
+    </div>
+    <div id="dialog-error" class="dialog">
+        <img src="assets/icon/circle-exclamation-solid.png" alt="check">
+        <span id="message">ada kesalahan pada sistem</span>
+        <a>Silahkan Refresh halaman ini</a>
+    </div>
     
-    <div id="dialog-weekend">
+    <div id="dialog-weekend" class="dialog">
         <img src="assets/icon/calendar-days-solid.png" alt="">
         <span>Ini hari libur jadi gak usah absen</span>
         <a href="dashboard.html">kembali ke dashboard</a>

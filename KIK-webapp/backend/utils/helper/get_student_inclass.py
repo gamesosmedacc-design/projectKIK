@@ -10,7 +10,7 @@ def get_student_perperson(targetclass):
     today = datetime.now(ZoneInfo("Asia/Makassar")).date()
 
     try :
-        student_list = select(User, Attendance.status).outerjoin(Attendance, and_(User.id == Attendance.users_id, Attendance.date_insert == today)).where(User.class_ == targetclass)
+        student_list = select(User, Attendance).outerjoin(Attendance, and_(User.id == Attendance.users_id, Attendance.date_insert == today)).where(User.class_ == targetclass)
         return session.execute(student_list).all()
     except :
         session.rollback()

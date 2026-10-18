@@ -28,10 +28,13 @@ const school_longitude_3 = 115.2630044434663
 const dialog_after = document.getElementById("dialog-after-absent");
 const main_container = document.getElementById("main-container");
 const dialog_weekend = document.getElementById("dialog-weekend");
+const dialog_pending = document.getElementById("dialog-pending")
+const dialog_error = document.getElementById("dialog-error")
 
 let user_latitude;
 let user_longitude;
 let file_in_base64;
+let exc_in_base64;
 
 document.addEventListener("DOMContentLoaded", async () => {
     try {
@@ -127,7 +130,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     try {
         const data_absen = await api_get("/getmyattendance");
         if (data_absen.success) {
-            alert("kamu sudah absen hari ini TERIMA KASIH!!")
             dialog_after.style.display = "flex";
             main_container.style.display = "none";
             dialog_weekend.style.display = "none";
@@ -184,7 +186,6 @@ function show_form(target) {
 dashboard_btn.addEventListener("click", (e) => {
     e.preventDefault();
     
-    alert("kembali ke dashboard...");
     window.location.href = "dashboard.html";
 })
 
@@ -210,14 +211,12 @@ document.getElementById("rephoto-btn").addEventListener("click", () => {
 require_page_link_nfw.addEventListener("click", (e)=>{
     e.preventDefault();
     
-    alert("ke halaman syarat & ketentuan...");
     window.location.href = "requir.html";
 })
 
 require_page_link_excused.addEventListener("click", (e)=>{
     e.preventDefault();
 
-    alert("ke halaman syarat & ketentuan...");
     window.location.href = "requir.html";
 })
 
@@ -234,13 +233,21 @@ submit_btn_present.addEventListener("click", async(e) => {
         try {
             const data = await api_requests("/present", "POST", {data_status, data_b64_selfie, data_latitude, data_longitude})
             if (data.success) {
-                alert("kehadiran kamu sudah dicatat");
+                dialog_pending.style.display = "none";
+                dialog_error.style.display = "none"
                 dialog_after.style.display = "flex";
                 main_container.style.display = "none";
-            } else {
-                alert(data.message)                }
+            } else {                
+                dialog_pending.style.display = "none"
+                dialog_error.style.display = "flex"
+                dialog_after.style.display = "none";
+                main_container.style.display = "none";
+            }
             } catch (error) {
-                alert(error.message)
+                dialog_pending.style.display = "none"
+                dialog_error.style.display = "flex"
+                dialog_after.style.display = "none";
+                main_container.style.display = "none";
             } finally {
                 submit_btn_present.disabled = false;
             }
@@ -254,11 +261,28 @@ submit_btn_present.addEventListener("click", async(e) => {
             file_in_base64 = null;
             return
         }    
+        
         const reader = new FileReader();
         
-    reader.onload = () => {
-        file_in_base64 = reader.result;
-    }
+        reader.onload = () => {
+            file_in_base64 = reader.result;
+        }
+        reader.readAsDataURL(file);
+    })
+    
+    const exc_to_base64 = document.getElementById("file-note-excused");
+    exc_to_base64.addEventListener("change", async () => {
+        const file = exc_to_base64.files[0];
+        if (!file) {
+            exc_in_base64 = null;
+            return
+        }    
+        
+        const reader = new FileReader();
+        
+        reader.onload = () => {
+            exc_in_base64 = reader.result;
+        }
     reader.readAsDataURL(file);
 })
 
@@ -291,6 +315,10 @@ submit_nfw.addEventListener("click", async () => {
             console.error("error", nfw_data.message)
         }
     } catch (error) {
+        dialog_pending.style.display = "none"
+        dialog_error.style.display = "flex"
+        dialog_after.style.display = "none";
+        main_container.style.display = "none";
         console.error("error", error)
     }
 })
@@ -298,8 +326,8 @@ submit_nfw.addEventListener("click", async () => {
 const submit_exc = document.getElementById("submit-btn-exc") ;
 submit_exc.addEventListener("click", async () => {
     const status = document.querySelector(".items.active").textContent.trim();
-    const reason = document.getElementById("exc-reason").value;
-    const exc_file = file_in_base64;
+    const reason = document.getElementById("excused-reason").value;
+    const exc_file = exc_in_base64;
     const data_longitude = user_longitude;
     const data_latitude = user_latitude;
     
@@ -314,16 +342,24 @@ submit_exc.addEventListener("click", async () => {
     }
     
     try {
-        const exc_data = await api_requests("/nfworexcattendance", "POST", {status, reason, exc_file_file, data_longitude, data_latitude});
+        const exc_data = await api_requests("/nfworexcattendance", "POST", {status, reason, exc_file, data_longitude, data_latitude});
         if (exc_data.success) {
             console.log("kamu sudah absen izin")
             dialog_after.style.display = "flex";
             main_container.style.display = "none";
             dialog_weekend.style.display = "none";
         } else {
-            console.error("error", nfw_data.message)
+            dialog_pending.style.display = "none"
+            dialog_error.style.display = "flex"
+            dialog_after.style.display = "none";
+            main_container.style.display = "none";
+            console.error("error", exc_data.message)
         }
     } catch (error) {
+        dialog_pending.style.display = "none"
+        dialog_error.style.display = "flex"
+        dialog_after.style.display = "none";
+        main_container.style.display = "none";
         console.error("error", error)
     }
 })

@@ -16,6 +16,7 @@ from utils.helper.check_my_attendance import check_my_attendance
 from utils.helper.get_my_summary import get_my_summary
 from utils.helper.get_student_point import check_students_point
 from utils.helper.get_my_point import get_my_point
+from utils.helper.get_my_history import get_my_history
 from utils.helper.point_increment import insert_point
 from utils.helper.userAbsent import user_absent
 from utils.helper.savePhoto import save_to_uploads
@@ -321,10 +322,11 @@ def targetname():
             "NIS": user.nis,
             "name": user.username,
             "class_": user.class_,
-            "status": status if status else "Tidak absen",
+            "status": attendance.status if attendance is not None else "Tidak absen",
+            "url": attendance.file_url if attendance is not None else "",
             "total_point": point_data.get(user.id, 0) if point_data.get(user.id, 0) else 0
         }
-        for user, status in student_data
+        for user, attendance in student_data
     ]
     return jsonify({"success":True, "list_student": list_students}), 200
 
@@ -466,6 +468,25 @@ def mypoint():
         return jsonify({"success":False, "message":"ada yang salah dengan server"}), 400
 
     return jsonify({"success":True, "total_point":point}), 200
+
+@app.route("/getmyhistory", methods=["GET"])
+def myhistory():
+    user_id = session["session_id"]
+    if not user_id:
+        return jsonify({"success":False, "message":"sesi telah berakhir"})
+
+    histories = get_my_history(user_id)
+    me = get_from_database(user_id)
+    myhistories = [{
+        "id": history.users_id,
+        "date": history.date_insert,
+        "status": history.status,
+        "name": me.username
+    }
+    for history in histories
+    ]
+    print(myhistories)
+    return jsonify({"success":True, "history":myhistories})
 
 @app.route("/logout", methods=["GET"])
 def logout():

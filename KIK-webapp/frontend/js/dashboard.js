@@ -8,7 +8,7 @@ const bar_btn = document.getElementById("bar_icon_btn");
 const absent_btn = document.getElementById("absent_page_btn");
 const achievement_btn = document.getElementById("achievement-btn");
 const status_student_btn = document.getElementById("student-status-btn");
-const history_btn = document.getElementById("history-btn");
+const history_btn = document.getElementById("history_page_btn");
 const settings_btn = document.getElementById("settings-btn");
 const logout_btn = document.getElementById("logout-btn");
 const point_btn = document.getElementById("point-btn");
@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             } else if (status === "Terlambat") {
                 announcement_box.textContent = "Next jangan telat Ya!"
             } else if (status === "alpa") {
-                announcement_box.textContent = "Nxt lebih tepat waktu"
+                announcement_box.textContent = "Next lebih tepat waktu"
             }
 
             
@@ -151,6 +151,11 @@ status_student_btn.addEventListener("click", (ea) => {
 
     window.location.href = "statustudent.html";
 })
+
+history_btn.addEventListener("click", () => {
+    window.location.href = "history.html";
+})
+
 logout_btn.addEventListener("click", async (ea) => {
     ea.preventDefault();
     try {

@@ -51,8 +51,7 @@ const dashboard_btn = document.getElementById("dashboard-page")
 dashboard_btn.addEventListener("click", (e) => {
     e.preventDefault();
 
-    alert("kembali ke dashboard...");
-    widow.location.href = "dashboard.html";
+    window.location.href = "dashboard.html";
 })
 
 

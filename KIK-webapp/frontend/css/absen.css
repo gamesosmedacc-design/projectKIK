@@ -22,7 +22,7 @@
     --detail2: linear-gradient(135deg, #e81717, #a50c0c);
     --detail3: linear-gradient(135deg, #f59709, #ca5a0a);
     --detail4: linear-gradient(135deg, #0a0c0a, #242432);
-        --detail5: linear-gradient(135deg, #2C8C99, #226973);
+    --detail5: linear-gradient(135deg, #2C8C99, #226973);
     --detail6: linear-gradient(135deg, #EE4266, #96263f);
     --detail7: linear-gradient(135deg, #23a068, #0c6d31);
 }
@@ -377,7 +377,21 @@ body {
         padding: 2px;
     }
 
-    #dialog-after-absent span {
+    #dialog-pending img {
+        max-width: 100px;
+        border-radius: 50%;
+        border: 2px solid orange;
+        padding: 4px;
+    }
+
+    #dialog-error img {
+        max-width: 100px;
+        border-radius: 50%;
+        border: 2px solid red;
+        padding: 2px;
+    }
+
+    .dialog span {
         border-top: 2px solid white;
         padding: 2px;
     }
@@ -411,6 +425,42 @@ body {
         max-height: 300px;
     }
     
+    #dialog-pending {
+        display: none;
+        color: var(--base);
+        flex-direction:column;
+        padding: 12px;
+        justify-content: center;
+        align-items: center;
+        background: var(--detail3);
+        border: 2px solid orange;
+        animation: slide_in 0.5s ease, fade_in 1s ease;
+        border-radius: 25px;
+        min-width: 200px;
+        gap: 12px;
+        min-height: 200px;
+        max-width: 300px;
+        max-height: 300px;
+    }
+
+    #dialog-error {
+        display: none;
+        color: var(--base);
+        flex-direction:column;
+        padding: 12px;
+        justify-content: center;
+        align-items: center;
+        background: var(--detail2);
+        border: 2px solid red;
+        animation: slide_in 0.5s ease, fade_in 1s ease;
+        border-radius: 25px;
+        min-width: 200px;
+        gap: 12px;
+        min-height: 200px;
+        max-width: 300px;
+        max-height: 300px;
+    }
+    
     #dialog-weekend img {
         max-width: 100px;
         border-radius: 50%;
@@ -431,5 +481,10 @@ body {
     #dialog-weekend a:active {
         text-decoration: underline;
         cursor: progress;
+    }
+
+    .dialog img {
+        max-width: 100px;
+        border-radius: 50%;
     }
 }

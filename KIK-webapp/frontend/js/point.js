@@ -49,3 +49,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 })
 
+const dashboard_btn = document.getElementById("dashboard-page");
+dashboard_btn.addEventListener("click", (e) => {
+    e.preventDefault();
+    
+    window.location.href = "dashboard.html";
+})

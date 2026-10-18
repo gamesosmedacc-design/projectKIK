@@ -66,6 +66,7 @@ td {
     height: 25px;
 }
 
+
 #top-nav {
     display: flex;
     flex-direction: row;
@@ -77,8 +78,8 @@ td {
 }
 
 #top-nav img {
-    width: 30px;
-    height: 30px;
+    width: 20px;
+    height: 20px;
     margin-right: 12px;
 }
 
