@@ -3,7 +3,7 @@ from utils.tools.database import base, engine, Session_local
 from utils.tools.users import User
 
 
-def insert_user_data(data_username, hash_password, data_call_name, data_subject, data_class, data_role, data_email, data_nis, data_phone_number):
+def insert_user_data(data_username, hash_password, data_call_name, data_subject, data_class, data_role, data_nis,):
     session = Session_local()
     try :
         data = User(
@@ -13,9 +13,7 @@ def insert_user_data(data_username, hash_password, data_call_name, data_subject,
             subject = data_subject,
             class_ = data_class,
             role = data_role,
-            email = data_email,
-            nis = data_nis,
-            phone_number = data_phone_number
+            nis = data_nis
             )
         session.add_all([data])
         session.commit()

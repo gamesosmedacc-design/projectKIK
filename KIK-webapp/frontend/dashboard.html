@@ -11,7 +11,8 @@
         <nav id="top_navigation_bar">
             <img src="assets/img/images-removebg-preview.png" id="profile_pict">
             <h1>Dashboard <span id="greetings"></span>!</h1>
-            <img src="assets/icon/bars-solid (1).png" id="bar_icon_btn" alt="bars-solid">
+            <img style="display: none;" src="assets/icon/bars-solid (1).png" id="bar_icon_btn" alt="bars-solid">
+            <a style="background: #f11; border: 2px solid #f00; border-radius: 6px; margin-right: 12px; padding: 6px; text-align: center;" id="logout-btn">←</a>
         </nav>
         <div id="main_section">
             <main id="main_content">
@@ -40,8 +41,19 @@
                             <p><strong>Riwayat</strong></p>
                         </div>
                     </div>
+                    <div id="teacher-additional">                        
+                        <div class="items" id="siswa_page_btn">
+                            <p><strong>Status Siswa</strong></p>
+                        </div>
+                    </div>
+                        <div id="setting">
+                            <p><strong>Pengaturan</strong></p>
+                        </div>
                         <div id="announcement">
                             <p><strong></strong></p>
+                        </div>
+                        <div id="system-setting">
+                            <p><strong>Pengaturan Sistem</strong></p>
                         </div>
                     </div>
                 </div>
@@ -49,27 +61,6 @@
         </div>
     </div>
 
-    <dialog id="right_nav_sheet">
-        <nav>
-            <div id="right_sheet_container">
-                <div id="menu">
-                    <h2>MENU</h2>
-                    <hr width="200" size="2" color="white">
-                    <div class="items" id="point-btn">
-                        <img src="assets/icon/address-book-solid.png">
-                        <p><strong>Poin</strong></p>
-                    </div>
-                    <div class="items" id="student-status-btn">
-                        <img src="assets/icon/user-graduate-solid.png">
-                        <p><strong>Siswa</strong></p>
-                    </div>
-                    <div class="items" id="logout-btn">
-                        <img src="assets/icon/arrow-right-from-bracket-solid.png">
-                    </div>
-                </div>
-            </div>
-        </nav>
-    </dialog>
     <script src="js/api.js"></script>
     <script src="js/dashboard.js"></script>
 </body>

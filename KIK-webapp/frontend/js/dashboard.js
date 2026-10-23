@@ -1,17 +1,15 @@
-
-
-const right_nav_sheet = document.getElementById("right_nav_sheet");
-const wrapper_section = document.getElementById("right_sheet_container");
-
-const bar_btn = document.getElementById("bar_icon_btn");
-
 const absent_btn = document.getElementById("absent_page_btn");
 const achievement_btn = document.getElementById("achievement-btn");
-const status_student_btn = document.getElementById("student-status-btn");
+const status_student_btn = document.getElementById("siswa_page_btn");
 const history_btn = document.getElementById("history_page_btn");
 const settings_btn = document.getElementById("settings-btn");
 const logout_btn = document.getElementById("logout-btn");
 const point_btn = document.getElementById("point-btn");
+const announcement_box = document.getElementById("announcement");
+const attendance_log = document.getElementById("attendance_log");
+const teacher_feature = document.getElementById("teacher-additional");
+const student_feature = document.getElementById("additional");
+const system_setting = document.getElementById("system-setting");
 
 document.addEventListener("DOMContentLoaded", async () => {
     try {
@@ -27,7 +25,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     try {
-        const announcement_box = document.getElementById("announcement")
         const data_absen = await api_get("/getmyattendance", "GET");
         if (data_absen.success) {            
             const status = data_absen.data_absen.status;
@@ -39,7 +36,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 announcement_box.textContent = "Oke sudah absen!";
             } else if (status === "Terlambat") {
                 announcement_box.textContent = "Next jangan telat Ya!"
-            } else if (status === "alpa") {
+            } else if (status === "Alpa") {
                 announcement_box.textContent = "Next lebih tepat waktu"
             }
 
@@ -90,13 +87,39 @@ async function my_name() {
 
         if (role === "Guru") {
             status_student_btn.style.display = "flex";
+            absent_btn.style.display = "none";
+            history_btn.style.display = "none";
+            announcement_box.style.display = "none";
+            attendance_log.style.display = "none";
+            teacher_feature.style.display = "flex";
+            student_feature.style.display = "none";
+            system_setting.style.display = "none";
         }
-
+        
         if (role === "Murid") {
             status_student_btn.style.display = "none";
+            absent_btn.style.display = "flex";
+            history_btn.style.display = "flex";
+            announcement_box.style.display = "flex";
+            attendance_log.style.display = "flex";
+            teacher_feature.style.display = "none";
+            student_feature.style.display = "flex";
+            system_setting.style.display = "none";
+        }
+        
+        if (role === "admin") {
+            status_student_btn.style.display = "flex";
+            absent_btn.style.display = "flex";
+            history_btn.style.display = "flex";
+            announcement_box.style.display = "flex";
+            attendance_log.style.display = "flex";
+            teacher_feature.style.display = "flex";
+            student_feature.style.display = "flex";
+            teacher_feature.style.flexDirection = "row";
+            status_student_btn.style.width = "120px";
+            system_setting.style.display = "flex";
         }
 
-        
         } else {
         console.error('Error', data.message)
         }
@@ -120,32 +143,12 @@ async function myattendance() {
 my_name();
 myattendance();
 
-
-bar_btn.addEventListener("click", (e) => {
-    e.preventDefault();
-    
-    right_nav_sheet.showModal();
-});
-
-right_nav_sheet.addEventListener("click", () => {
-    right_nav_sheet.close();
-});
-
-wrapper_section.addEventListener("click", (e)=> {
-    e.stopPropagation();
-});
-
 absent_btn.addEventListener("click", (ex) => {
     ex.preventDefault();
 
     window.location.href = "absent.html";
 });
 
-point_btn.addEventListener("click", (ea) => {
-    ea.preventDefault();
-
-    window.location.href = "point.html";
-})
 status_student_btn.addEventListener("click", (ea) => {
     ea.preventDefault();
 
@@ -154,6 +157,13 @@ status_student_btn.addEventListener("click", (ea) => {
 
 history_btn.addEventListener("click", () => {
     window.location.href = "history.html";
+})
+
+system_setting.addEventListener("click", (e)=>{
+    e.preventDefault()
+
+    alert("hahahaha");
+    window.location.href = "systemsetting.html"
 })
 
 logout_btn.addEventListener("click", async (ea) => {
@@ -167,4 +177,4 @@ logout_btn.addEventListener("click", async (ea) => {
     } catch (error) {
         console.error("error", error)
     }
-})
+}) 

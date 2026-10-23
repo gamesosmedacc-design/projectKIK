@@ -30,6 +30,7 @@ import os, bcrypt, re
 load_dotenv()
 
 base.metadata.create_all(bind=engine)
+print("table dibuat")
 
 def login_required(f):
     @wraps(f)
@@ -59,12 +60,14 @@ def sign_in():
     data = request.get_json()
     password_data = data.get("password_value")
     username_data = data.get("username_value")
-    nis_data = data.get("nis")
+    print(username_data)
+    print(password_data)
 
     data = check_user_data(username_data)
+    print(data)
 
     if data == None:
-        return jsonify({"success":False, "message":"username atau password salah"}), 400
+        return jsonify({"success":False, "message":"username atau password salah"}), 401
 
     password_hash = data.hashed_pw
 
@@ -84,9 +87,7 @@ def sign_up():
     data_subject = data.get("data_subject")
     data_class = data.get("data_class").upper()
     data_role = data.get("data_role")
-    data_email = data.get("data_email")
     data_nis = data.get("data_nis")
-    data_phone_number = data.get("data_phone_number")
 
     symbol_regex = r'^[a-zA-Z0-9\s.,_]+$'
     char_regex = r'^[a-zA-Z]+$'
@@ -183,39 +184,13 @@ def sign_up():
         
         if len(data_nis) != 4:
             return jsonify({"success":False, "message":"NIS harus 4 digit"}), 400
-        
-
         data_subject = None
-    # class & role ==============================================
-
-    # email =====================================================
-
-    if data_email == "":
-        return jsonify({"success":False, "message":"email tidak boleh kosong"}), 400
-
-    if not data_email.endswith(("@gmail.com", "@belajar.id")):
-        return jsonify({"success":False, "message":"email harus di akhiri dengan @gmail.com atau @belajar.id"}), 400
-
-
-    # email =====================================================
-
-    # phone number ==============================================
-    
-    if data_phone_number:
-
-        if data_phone_number == "":
-            return jsonify({"success":False, "message":"nomor hp kamu kosong"}), 400
-
-        if not re.fullmatch(number_regex, data_phone_number):
-            return jsonify({"success":False, "message":"nomor hanya boleh di isi angka"}), 400
-
-    # phone number ==============================================
 
     hashed_pw = bcrypt.hashpw(data_password.encode(), bcrypt.gensalt())
     hashed_pw_str = hashed_pw.decode()
 
     try :
-        new_user_id = insert_user_data(data_username, hashed_pw_str, data_call_name, data_subject, data_class, data_role, data_email, data_nis, data_phone_number)
+        new_user_id = insert_user_data(data_username, hashed_pw_str, data_call_name, data_subject, data_class, data_role, data_nis)
         data = check_user_data(data_username)
         session["session_id"] = data.id
 
@@ -339,7 +314,7 @@ def myabsent():
     rn = datetime.now(ZoneInfo("Asia/Makassar"))
     dayname = rn.strftime("%A")
     current_time = rn.time()
-    late_limit = time(7, 30, 0)
+    late_limit = time(23, 30, 0)
     data_today = datetime.now(ZoneInfo("Asia/Makassar")).date()
 
     if not user_id:
@@ -363,12 +338,12 @@ def myabsent():
 
         distance_from_center = haversine_formula(data_latitude, data_longitude)
         
-        if distance_from_center[0] or distance_from_center[1] or distance_from_center[2]:
+        if distance_from_center[0] or distance_from_center[1] or distance_from_center[2] or distance_from_center[3]:
             data_photo_url = save_to_uploads(data_base64, user_id, data_today)
             
             if current_time > late_limit :
                 data_status = "Terlambat"
-                point = 5
+                point = 2
                 user_absent(user_id, data_status, data_photo_url, data_latitude, data_longitude, data_file_url, data_reason)
                 insert_point(user_id, point, category=data_status)
                 return jsonify({"success":True, "message":"kehadiranmu tetap dicatat dengan status terlambat!"})
@@ -390,7 +365,7 @@ def absentdispresent():
     rn = datetime.now(ZoneInfo("Asia/Makassar"))
     current_time = rn.time()
     dayname = rn.strftime("%A")
-    late_limit = time(7, 30, 0)
+    late_limit = time(23, 30, 0)
     data_today = datetime.now(ZoneInfo("Asia/Makassar")).date()
 
     if not user_id :

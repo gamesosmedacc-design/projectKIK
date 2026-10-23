@@ -2,14 +2,14 @@ document.addEventListener("DOMContentLoaded", async () => {
     try {
         const data = await api_get("/getmyhistory", "GET")
         if (data.success) {
-            console.log("u did it")
             const history_data = data.history;
-            console.log(history_data)
             const row_data = document.getElementById("container")
             let content = "";
+            let date = "";
 
             history_data.forEach(history => {
                 let text_color = "";
+                date = history.date.split(" ").slice(1, 4).join(" ");
                 if (history.status === "Hadir") {
                     text_color = "lime"
                 } else if (history.status === "Sakit") {
@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 content += `
                     <tr>
                         <td>${history.name}</td>
-                        <td>${history.date}</td>
+                        <td>${date}</td>
                         <td style='color:${text_color}'>${history.status}</td>
                     </tr>
                 `

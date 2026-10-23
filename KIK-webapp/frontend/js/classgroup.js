@@ -2,40 +2,56 @@ document.addEventListener("DOMContentLoaded", async () => {
     const data_target = await api_get("/gettargetclass", "GET");
     if (data_target.success) {
         const data_siswa = data_target.list_student
-        const table_row = document.getElementById("container")
-        let students = "";
-        let check_link = "";
-        let full_url = "";
+        const card_wrap = document.getElementById("card-wrap");
+
+        let data_info = "";
+        let link_photo = "";
+
+        let pin_color = "";
         data_siswa.forEach(student => {
-            let row_color = "";
-            if (student.total_point <= 0) {
-                row_color = 'lime';
-            } else if (student.total_point <= 50) {
-                row_color = 'yellow';
-            } else {
-                row_color = 'red'
-            } 
 
-            if (student.status === "Sakit" || student.status === "Izin" || student.status === "Terlambat" || student.status === "Alpa") {
-                check_link = "(CEK FOTO)";
-                full_url = `https://sbydsqahqcgwlczniuhs.supabase.co/storage/v1/object/public/uploads/${student.url}`;
+            const class_name = document.getElementById("class_");
+            class_name.textContent = `${student.class_}`
 
-            } else if (student.status === "Hadir" || student.status === "Tidak absen") {
-                check_link = "";
-                full_url = "";
+            if (student.status === "hadir") {
+                pin_color = "lime";
             }
-            
-            students += `
-                <tr>
-                    <td class="name">${student.name}</td>
-                    <td class="class_">${student.class_}</td>
-                    <td class="NIS">${student.NIS}</td>
-                    <td class="status">${student.status} <a href="${full_url}" style="color: var(--base);">${check_link}</a></td>
-                    <td class="total-point" style='color: ${row_color}'; >${student.total_point}</td>
-                    </tr>
-            `;
+            if (student.status === "Sakit" || student.status === "Izin") {
+                pin_color = "orange";
+            }
+            if (student.status === "Tidak absen" || student.status === "Alpa" || student.status === "Terlambat") {
+                pin_color = "red";
+            } else {
+                pin_color = "black";
+            }
+            if (student.status === "Sakit" || student.status === "Hadir" || student.status === "Izin" || student.status === "Terlambat" || student.status === "Alpa") {
+                check_link = "(CEK FOTO)";
+                link_photo = `https://sbydsqahqcgwlczniuhs.supabase.co/storage/v1/object/public/uploads/${student.url}`;
+
+            } else if (student.status === "Tidak absen") {
+                link_photo = "assets/img/default-photo.jpeg"
+            }
+
+            data_info += `
+                <div class="cards">
+                    <div class="top-card">
+                        <div class="information">
+                            <a class="name">${student.name} | ${student.NIS}</a>
+                                <a class="date">Hari ini</a>
+                        </div>
+                        <div class="status-wrap">
+                            <div class="pin" style="background: ${pin_color};"></div>
+                            <a class="status">${student.status}</a>
+                            <img src="assets/icon/ellipsis-solid.png" class="more more-btn">
+                        </div>
+                    </div>
+                    <div class="photo-wrap">
+                        <img class="photo" src="${link_photo}" alt="foto kehadiran">
+                    </div>
+                </div>
+            `
         });        
-        table_row.innerHTML = students;
+        card_wrap.innerHTML = data_info;
     }
 })
 

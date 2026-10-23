@@ -10,6 +10,4 @@ class User(base):
     subject = Column(String(50), nullable=True)
     class_ = Column(String(10), nullable=True)
     role = Column(String(20), nullable=False)
-    email = Column(String(50), nullable=False)
     nis = Column(String(20), nullable=True, unique=True)
-    phone_number = Column(String(12), nullable=True)

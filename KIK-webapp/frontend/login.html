@@ -24,22 +24,27 @@
         <img src="assets/img/images-removebg-preview.png" class="logo">
         <p class="start_text"><strong>Register sekarang!</strong></p>
         <input type="text" id="create_username" placeholder="Buat username">
+        <span style="font-size: 10px; color:red; text-decoration: none; display: none; margin: 0px;" id="usn-note"></span>
         <div id="password_box">
             <img class="solid_eye" src="assets/icon/eye-solid (2).png">
             <img class="slash_eye" src="assets/icon/eye-slash-solid (2).png">
-            <input type="password" id="create_password" class="input_password" placeholder="Buat password">
+            <input type="password" id="create_password" class="input_password" placeholder="Buat password"><br>
         </div>
+        <span style="font-size: 10px; color:red; text-decoration: none; display: none; margin: 0;" id="pw-note"></span>
         <p class="note"><strong>Note : Password harus memiliki kombinasi huruf dan angka!</strong></p>
         <div id="role-wrap">
             <div class="roles active"><span>Guru</span></div>
             <div class="roles"><span>Murid</span></div>
         </div>
-        <input type="text" id="create_nis" placeholder="NIS/NIP">
-        <input type="text" id="call_name" placeholder="Nama panggilan">
-        <input type="text" id="subject_teach" placeholder="Mata Pelajaran">
-        <input type="text" id="class_" placeholder="Kelas">
-        <input type="text" id="email" placeholder="Email">
-        <input type="text" id="number" placeholder="Nomor Handphone">
+        <input type="number" id="create_nis" placeholder="NIS/NIP">
+        <span style="font-size: 10px; color:red; text-decoration: none; display: none; margin: 0;" id="nip-note"></span>
+        <span style="font-size: 10px; color:red; text-decoration: none; display: none; margin: 0;" id="nis-note"></span>
+        <input type="text" id="call_name" placeholder="Nama panggilan   Cth: Xeno">
+        <span style="font-size: 10px; color:red; text-decoration: none; display: none; margin: 0;" id="call-note"></span>
+        <input type="text" id="subject_teach" placeholder="Mata Pelajaran    Cth: IPAS">
+        <span style="font-size: 10px; color:red; text-decoration: none; display: none; margin: 0;" id="mapel-note"></span>
+        <input type="text" id="class_" placeholder="Kelas   Cth: XI TKJ">
+        <span style="font-size: 10px; color:red; text-decoration: none; display: none; margin: 0;" id="class-note"></span>
         <p class="link">Sudah punya akun? <a id="login_link">Login</a></p>
         <button class="sign_in_btn"><b>Sign in</b></button>
     </form>

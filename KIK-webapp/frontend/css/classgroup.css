@@ -101,3 +101,71 @@ td {
     background-color: var(--base);
     color: var(--primary);
 }
+
+#card-wrap {
+    margin-top: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+
+.cards {
+    border: 2px solid var(--accents);
+    display: flex;
+    flex-direction: column;
+    background-color: var(--primary);
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    padding: 4px;
+    border-radius: 12px;
+    max-width: 95vw;
+}
+
+.top-card {
+    width: 90vw;
+    padding-bottom: 4px;
+    border-bottom: 2px solid var(--accents);
+}
+
+.information {
+    display: flex;
+    justify-content: space-between;
+}
+
+.status-wrap {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+}
+
+.photo-wrap {
+    aspect-ratio: 14 / 7;
+    width: 90vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border: 2px solid var(--accents);
+    border-radius: 8px;
+    margin-bottom: 4px ;
+}
+
+.photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.more {
+    max-width: 25px;
+    max-height: 25px;
+    margin-left: auto;
+}
+
+.pin {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
