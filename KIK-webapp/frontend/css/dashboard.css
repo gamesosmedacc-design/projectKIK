@@ -243,6 +243,13 @@
         display: none;
         width: 250px;
     }
+
+    #update_page_btn {
+        background: var(--detail8);
+        border: 2px solid #3b3c7b;
+        display: none;
+        width: 250px;
+    }
     
     #history_page_btn {
         display: none;

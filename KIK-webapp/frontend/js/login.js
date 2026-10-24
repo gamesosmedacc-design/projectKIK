@@ -446,7 +446,6 @@ document.getElementById("register_box").addEventListener("submit", async functio
 
     const data = await api_requests("/sign_up", "POST", payload)
     if (data.success){
-        alert(data.message)
         window.location.href = "dashboard.html";
     } else {
         alert(data.message);

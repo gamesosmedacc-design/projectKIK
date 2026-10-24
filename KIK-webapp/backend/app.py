@@ -1,12 +1,16 @@
 from flask import Flask, request, jsonify, session, redirect, url_for
 from zoneinfo import ZoneInfo
 from sqlalchemy.exc import IntegrityError
-from utils.tools.database import Session_local
 from flask_cors import CORS
+
+from utils.tools.database import Session_local
 from utils.tools.database import base, engine
 from utils.tools.attendance import Attendance
 from utils.tools.users import User
 from utils.tools.point import Point
+from utils.tools.point_config import point_config
+from utils.tools.updated_attendance import attendance_updated
+
 from utils.helper.signIn import check_user_data
 from utils.helper.signUp import insert_user_data
 from utils.helper.get_from_database import get_from_database
@@ -21,6 +25,13 @@ from utils.helper.point_increment import insert_point
 from utils.helper.userAbsent import user_absent
 from utils.helper.savePhoto import save_to_uploads
 from utils.helper.haversine import haversine_formula
+from utils.helper.gettodaydataattendance import get_update_row
+from utils.helper.get_today_absent import get_today_row
+from utils.helper.get_point import get_point
+from utils.helper.check_today_row import get_point_today
+from utils.helper.get_point_row import get_update_point_row
+from utils.helper.updateattendance import updated_by_insert
+
 from datetime import datetime, time
 from dotenv import load_dotenv
 from functools import wraps
@@ -230,6 +241,7 @@ def whoami():
 
 
 @app.route("/getmyattendance", methods=["GET"])
+@login_required
 def amiabsent():
     user_id = session["session_id"]
     rn = datetime.now(ZoneInfo("Asia/Makassar"))
@@ -238,7 +250,7 @@ def amiabsent():
     if not user_id:
         return jsonify({"success":False, "message":"login atau sesi telah berakhir silakan login ulang"}), 400
 
-    if dayname == "Saturday" or dayname == "Sunday":
+    if dayname == "Sunday":
         return jsonify({"success":False, "message":"weekend"}), 200
 
     data_absen = check_my_attendance(user_id)
@@ -299,6 +311,7 @@ def targetname():
             "class_": user.class_,
             "status": attendance.status if attendance is not None else "Tidak absen",
             "url": attendance.file_url if attendance is not None else "",
+            "url_present": attendance.photo_url if attendance is not None else "",
             "total_point": point_data.get(user.id, 0) if point_data.get(user.id, 0) else 0
         }
         for user, attendance in student_data
@@ -314,13 +327,13 @@ def myabsent():
     rn = datetime.now(ZoneInfo("Asia/Makassar"))
     dayname = rn.strftime("%A")
     current_time = rn.time()
-    late_limit = time(23, 30, 0)
+    late_limit = time(16, 0, 0)
     data_today = datetime.now(ZoneInfo("Asia/Makassar")).date()
 
     if not user_id:
         return jsonify({"success":False, "message":"login atau sesi telah habis"}), 400
 
-    if dayname == "Saturday" or dayname == "Sunday":
+    if dayname == "Sunday":
         return jsonify({"success":False, "message":"weekend"}), 200
 
     if data_status == "Hadir":
@@ -343,7 +356,7 @@ def myabsent():
             
             if current_time > late_limit :
                 data_status = "Terlambat"
-                point = 2
+                point = get_point(data_status)
                 user_absent(user_id, data_status, data_photo_url, data_latitude, data_longitude, data_file_url, data_reason)
                 insert_point(user_id, point, category=data_status)
                 return jsonify({"success":True, "message":"kehadiranmu tetap dicatat dengan status terlambat!"})
@@ -353,11 +366,12 @@ def myabsent():
                 return jsonify({"success":True, "message":"finally you did it"}), 400
                 
         else :
-            return jsonify({"success":False, "message":"kamu berada di luar area"}), 400
+            return jsonify({"success":False, "message":"out of range"}), 400
 
     return jsonify({"success":True, "message":"finally you did it"})
 
 @app.route("/nfworexcattendance", methods=["POST"])
+@login_required
 def absentdispresent():
     data = request.get_json()
     user_id = session["session_id"]
@@ -365,7 +379,7 @@ def absentdispresent():
     rn = datetime.now(ZoneInfo("Asia/Makassar"))
     current_time = rn.time()
     dayname = rn.strftime("%A")
-    late_limit = time(23, 30, 0)
+    late_limit = time(16, 0, 0)
     data_today = datetime.now(ZoneInfo("Asia/Makassar")).date()
 
     if not user_id :
@@ -374,7 +388,7 @@ def absentdispresent():
     if not data_status :
         return jsonify({"success":False, "message":"maaf status kamu tidak diketahui"}), 400
     
-    if dayname == "Saturday" or dayname == "Sunday":
+    if dayname == "Sunday":
         return jsonify({"success":False, "message":"weekend"}), 200
 
     if data_status == "Sakit":
@@ -394,7 +408,7 @@ def absentdispresent():
 
         if current_time > late_limit:
             data_status = "Alpa"
-            point = 5
+            point = get_point(data_status)
             user_absent(user_id, data_status, data_photo, data_latitude, data_longitude, data_file_nfw ,reason)
             insert_point(user_id, point, category=data_status)
             return jsonify({"success":True}), 200
@@ -420,7 +434,7 @@ def absentdispresent():
 
         if current_time > late_limit:
             data_status = "Alpa"
-            point = 5
+            point = get_point(data_status)
             user_absent(user_id, data_status, data_photo, data_latitude, data_longitude, data_file_exc ,reason)
             insert_point(user_id, point, category=data_status)
             return jsonify({"success":True}), 200
@@ -432,6 +446,7 @@ def absentdispresent():
     return jsonify({"success":False}), 400
 
 @app.route("/getmypoint", methods=["GET"])
+@login_required
 def mypoint():
     user_id = session["session_id"]
     if not user_id:
@@ -445,10 +460,11 @@ def mypoint():
     return jsonify({"success":True, "total_point":point}), 200
 
 @app.route("/getmyhistory", methods=["GET"])
+@login_required
 def myhistory():
     user_id = session["session_id"]
     if not user_id:
-        return jsonify({"success":False, "message":"sesi telah berakhir"})
+        return jsonify({"success":False, "message":"sesi telah berakhir"}), 400
 
     histories = get_my_history(user_id)
     me = get_from_database(user_id)
@@ -462,6 +478,198 @@ def myhistory():
     ]
     print(myhistories)
     return jsonify({"success":True, "history":myhistories})
+
+@app.route("/updatethestatus", methods=['POST'])
+@login_required
+def updatestatus():
+    users_id = session['session_id']
+    if not users_id:
+        return jsonify({"success":False, "message":"sesi telah berakhir"}), 400
+
+    data = request.get_json()
+    student_id = data.get("student_id")
+    old_status = data.get("status_before")
+    new_status = data.get("new_status_data")
+    new_file64 = data.get("file64")
+    new_reason = data.get("reason")
+    description = data.get("description")
+    data_today = datetime.now(ZoneInfo("Asia/Makassar")).date()
+
+    if not student_id :
+        return jsonify({"success":False, "message":"kesalahan saat mengambil data id murid"}), 401
+
+    if not old_status :
+        return jsonify({"success":False, "message":"status lama tidak ada atau murid belum absen"}), 400
+
+    if not new_status :
+        return jsonify({"success":False, "message":"status baru gagal didapatkan"}), 400
+
+    if student_id:
+        if old_status == "Hadir":
+            if new_status == "Sakit" or new_status == "Izin":
+                if not new_reason:
+                    return jsonify({"success":False, "message":"Alasan harus di Tulis dengan jelas"}), 400
+                if not new_file64:
+                    return jsonify({"success":False, "message":"File izin atau sakit yang baru harus ada"}), 400
+                if not description :
+                    return jsonify({"success":False, "message":"deskripsi atau keterangan guru wajib di isi!"}), 400
+
+                new_file_url = save_to_uploads(new_file64, student_id, data_today)
+                
+                data_updated = get_update_row(student_id, new_status, new_reason, new_file_url)
+                updated_by = updated_by_insert(data_updated.id, old_status, new_status, description, users_id)
+                return jsonify({"success":True, "message":"data sudah di update"}), 200
+            
+            if new_status == "Terlambat":
+                if not description :
+                    return jsonify({"success":False, "message":"deskripsi atau keterangan guru wajib di isi!"}), 400
+
+                point = get_point(new_status)
+                today_data = get_today_row(student_id)
+                today_point_row = get_point_today(student_id)
+                
+                if not today_data:
+                    return jsonify({"success":False, "message":"data kehadiran siswa ini tidak di temukan"}), 400
+                
+                if today_point_row:
+                    get_update_point_row(student_id, point, new_category=new_status)
+
+                else :
+                    point_increment = insert_point(student_id, point, category=new_status)
+                
+                data_updated = get_update_row(student_id, new_status, today_data.reason, today_data.file_url)
+                updated_by = updated_by_insert(data_updated.id, old_status, new_status, description, users_id)
+                return jsonify({"success":True, "message":"data sudah di update"}), 200
+
+            else :
+                return jsonify({"success":False, "message":"format perubahan tidak masuk akal"}), 400
+            
+        elif old_status == "Sakit":
+            if new_status == "Izin":
+                if not description :
+                    return jsonify({"success":False, "message":"deskripsi atau keterangan guru wajib di isi!"}), 400
+
+                today_data = get_today_row(student_id)
+
+                if not today_data:
+                    return jsonify({"success":False, "message":"data kehadiran siswa ini tidak di temukan"}), 400
+                
+                data_updated = get_update_row(student_id, new_status, today_data.reason, today_data.file_url)
+                updated_by = updated_by_insert(data_updated.id, old_status, new_status, description, users_id)
+                return jsonify({"success":True, "message":"data sudah di update"}), 200
+
+            if new_status == "Alpa":
+                if not description :
+                    return jsonify({"success":False, "message":"deskripsi atau keterangan guru wajib di isi!"}), 400
+
+                point = get_point(new_status)
+                today_data = get_today_row(student_id)
+                today_point_row = get_point_today(student_id)
+                
+                if not today_data:
+                    return jsonify({"success":False, "message":"data kehadiran siswa ini tidak di temukan"}), 400
+                
+                if today_point_row:
+                    get_update_point_row(student_id, point, new_category=new_status)
+
+                else :
+                    point_increment = insert_point(student_id, point, category=new_status)
+                
+                data_updated = get_update_row(student_id, new_status, today_data.reason, today_data.file_url)
+                updated_by = updated_by_insert(data_updated.id, old_status, new_status, description, users_id)
+                return jsonify({"success":True, "message":"data sudah di update"}), 200
+
+            else :
+                return jsonify({"success":False, "message":"format perubahan tidak masuk akal"}), 400
+
+        elif old_status == "Izin":
+            if new_status == "Sakit":
+                if not description :
+                    return jsonify({"success":False, "message":"deskripsi atau keterangan guru wajib di isi!"}), 400
+
+                today_data = get_today_row(student_id)
+
+                if not today_data:
+                    return jsonify({"success":False, "message":"data kehadiran siswa ini tidak di temukan"}), 400
+                
+                data_updated = get_update_row(student_id, new_status, today_data.reason, today_data.file_url)
+                updated_by = updated_by_insert(data_updated.id, old_status, new_status, description, users_id)
+                return jsonify({"success":True, "message":"data sudah di update"}), 200
+
+            if new_status == "Alpa":
+                if not description :
+                    return jsonify({"success":False, "message":"deskripsi atau keterangan guru wajib di isi!"}), 400
+
+                point = get_point(new_status)
+                today_data = get_today_row(student_id)
+                today_point_row = get_point_today(student_id)
+                
+                if not today_data:
+                    return jsonify({"success":False, "message":"data kehadiran siswa ini tidak di temukan"}), 400
+                
+                if today_point_row:
+                    get_update_point_row(student_id, point, new_category=new_status)
+
+                else :
+                    point_increment = insert_point(student_id, point, category=new_status)
+                
+                data_updated = get_update_row(student_id, new_status, today_data.reason, today_data.file_url)
+                updated_by = updated_by_insert(data_updated.id, old_status, new_status, description, users_id)
+                return jsonify({"success":True, "message":"data sudah di update"}), 200
+
+            else :
+                return jsonify({"success":False, "message":"format perubahan tidak masuk akal"}), 400
+
+        elif old_status == "Alpa":
+            if new_status == "Sakit" or new_status == "Izin":
+                if not description :
+                    return jsonify({"success":False, "message":"deskripsi atau keterangan guru wajib di isi!"}), 400
+
+                point = get_point(new_status)
+                today_data = get_today_row(student_id)
+
+                if not today_data:
+                    return jsonify({"success":False, "message":"data kehadiran siswa ini tidak di temukan"}), 400
+                
+                data_point_update = get_update_point_row(student_id, point, new_category=new_status)
+
+                if not data_point_update:
+                    return jsonify({"success":False, "message":"data point siswa ini tidak di temukan"}), 400
+                
+                data_updated = get_update_row(student_id, new_status, today_data.reason, today_data.file_url)
+                updated_by = updated_by_insert(data_updated.id, old_status, new_status, description, users_id)
+                return jsonify({"success":True, "message":"data sudah di update"}), 200
+            
+            else :
+                return jsonify({"success":False, "message":"format perubahan tidak masuk akal"}), 400
+        
+        elif old_status == "Terlambat":
+            if new_status == "Hadir":
+                if not description :
+                    return jsonify({"success":False, "message":"deskripsi atau keterangan guru wajib di isi!"}), 400
+
+                point = get_point(new_status)
+                today_data = get_today_row(student_id)
+
+                if not today_data:
+                    return jsonify({"success":False, "message":"data kehadiran siswa ini tidak di temukan"}), 400
+                
+                data_point_update = get_update_point_row(student_id, point, new_category=new_status)
+
+                if not data_point_update:
+                    return jsonify({"success":False, "message":"data point siswa ini tidak di temukan"}), 400
+                
+                data_updated = get_update_row(student_id, new_status, today_data.reason, today_data.file_url)
+                updated_by = updated_by_insert(data_updated.id, old_status, new_status, description, users_id)
+                return jsonify({"success":True, "message":"data sudah di update"}), 200
+            
+            else :
+                return jsonify({"success":False, "message":"format perubahan tidak masuk akal"}), 400
+
+        else :
+            return jsonify({"success":False, "message":"status lama tidak ada atau murid belum absen"}), 400
+
+    return jsonify({"success":True, "message":"oke aman"}), 200
 
 @app.route("/logout", methods=["GET"])
 def logout():

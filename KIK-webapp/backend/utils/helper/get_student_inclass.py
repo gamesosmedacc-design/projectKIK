@@ -5,6 +5,7 @@ from utils.tools.attendance import Attendance
 from datetime import datetime
 from zoneinfo import ZoneInfo
 
+
 def get_student_perperson(targetclass):
     session = Session_local()
     today = datetime.now(ZoneInfo("Asia/Makassar")).date()

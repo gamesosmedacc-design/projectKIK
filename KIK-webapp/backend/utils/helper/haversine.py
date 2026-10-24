@@ -10,8 +10,8 @@ def haversine_formula(data_latitude, data_longitude):
         school_latitude_3 = -2.7630683719681604
         school_longitude_3 = 115.2630044434663
 
-        demo_lat = -2.7630683719681604
-        demo_long = 115.2630044434663
+        demo_lat = -2.7885403117252814
+        demo_long = 115.26918003671771
 
         earth_radius = 6371000
 

@@ -16,6 +16,50 @@
     <div id="card-wrap">
     </div>
 
+    <dialog id="info-dialog">
+        <div id="top-dialog">
+            <a id="name-student"></a>
+            <img id="cancel-btn-info" class="cancel" src="assets/icon/xmark-solid.png" alt="X">
+        </div>
+        <button id="edit-ft" disabled>Edit Kehadiran</button>
+        <button id="detail-ft" disabled>Detail Absensi</button>
+    </dialog>
+    
+    <dialog id="edit-dialog">
+        <form id="edit-form">
+            <div id="top-edit">
+                <a><span id="name-edited"></span><span> | </span><span id="status-now"></span></a>
+                <img id="cancel-btn-edit" class="cancel" src="assets/icon/xmark-solid.png" alt="X">
+            </div>
+            <div id="edit-info">
+                <label for="new-status">Status Baru :</label>
+                <select id="new-status">
+                    <option id="hadir-option" value="Hadir" disabled>Hadir</option>
+                    <option id="sakit-option" value="Sakit" disabled>Sakit</option>
+                    <option id="izin-option" value="Izin" disabled>Izin</option>
+                    <option id="alpa-option" value="Alpa" disabled>Alpa</option>
+                    <option id="terlambat-option" value="Terlambat" disabled>Terlambat</option>
+                </select>
+                <div id="area-present-to-nfw-or-exc">
+                    <div id="reason-form" class="reason-form">
+                        <label for="reason">Alasan :</label>
+                        <textarea id="reason"></textarea>
+                    </div>
+                    <div id="file-form" class="inputfilephoto">
+                        <label for="new-file">File izin / sakit :</label>
+                        <input type="file" id="new-file">
+                    </div>
+                </div>
+                <div id="description-form" class="reason-form">
+                    <label for="description">Keterangan :</label>
+                    <textarea id="description"></textarea>
+                    <a># Semua data yang diminta harus di isi untuk mengedit kehadiran siswa</a>
+                </div>
+                <button>Submit</button>
+            </div>
+        </form>
+    </dialog>
+
     <script src="js/api.js"></script>
     <script src="js/classgroup.js"></script>
 </body>

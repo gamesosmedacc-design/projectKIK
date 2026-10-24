@@ -1,6 +1,7 @@
 const absent_btn = document.getElementById("absent_page_btn");
 const achievement_btn = document.getElementById("achievement-btn");
 const status_student_btn = document.getElementById("siswa_page_btn");
+const update_btn = document.getElementById("update_page_btn");
 const history_btn = document.getElementById("history_page_btn");
 const settings_btn = document.getElementById("settings-btn");
 const logout_btn = document.getElementById("logout-btn");
@@ -117,6 +118,7 @@ async function my_name() {
             student_feature.style.display = "flex";
             teacher_feature.style.flexDirection = "row";
             status_student_btn.style.width = "120px";
+            update_btn.style.width = "120px";
             system_setting.style.display = "flex";
         }
 

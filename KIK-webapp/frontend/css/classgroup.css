@@ -10,7 +10,10 @@
         font-style: normal;
 }
 
-
+* {
+    font-family: 'josefin';
+    color: var(--base);
+}
 
 :root {
     --base: #CFDBD5;
@@ -32,13 +35,19 @@
     100% { background-position: 0% 50%;}
 }
 
+@keyframes grow_up {
+    from {
+        transform: scale(0);
+    } to {
+        transform: scale(1);
+    }
+}
+
 body {
     display: flex;
     flex-direction: column;
     align-items: center;
     margin: 0px;
-    font-family: "josefin";
-    color: var(--base);
     height: 100vh;
     background: var(--detail4);
     animation: background_animation 8s linear infinite;
@@ -88,9 +97,7 @@ td {
 }
 
 #top-nav button {
-    font-family: "josefin";
     background-color: var(--primary);
-    color: var(--base);
     padding: 8px;
     border: 2px solid var(--accents);
     border-radius: 8px;
@@ -168,4 +175,133 @@ td {
     width: 10px;
     height: 10px;
     border-radius: 50%;
+}
+
+#info-dialog {
+    display: none;
+    flex-direction: column;
+    outline: none;
+    overflow: visible;
+    gap: 12px;
+    color: white;
+    border: 2px solid var(--accents);
+    border-radius: 12px;
+    background-color: var(--primary);
+    width: 75vw;
+    animation: grow_up 0.5s ease;
+}
+
+#info-dialog::backdrop,
+#edit-dialog::backdrop {
+    background-color: rgba(0,0,0, 0.5);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+#top-dialog {
+    display: flex;
+    flex-direction: row;
+    border-bottom: 2px solid var(--accents);
+    padding: 4px ;
+}
+
+#top-dialog a {
+    margin-top: auto;
+    font-size: 25px;
+}
+
+.cancel {
+    border-radius: 50%;
+    max-width: 25px;
+    max-height: 25px;
+    margin-bottom: auto;
+    margin-left: auto;
+    transform: translateY(-100%);
+    left: 25px;
+    border: 2px solid maroon;
+    background: red;
+    position: relative;
+}
+
+#edit-ft,
+#report-ft,
+#detail-ft{
+    padding: 6px;
+    background-color: var(--surface);
+    border: 1.8px solid var(--accents);
+    border-radius: 8px;
+}
+
+#edit-dialog {
+    display: none;
+    width: 75vw;
+    background-color: var(--primary);
+    border-radius: 12px;
+    outline: none;
+    border: 2px solid var(--accents);
+    color: white;
+    overflow: visible;
+    flex-direction: column;
+    animation: grow_up 0.5s ease;
+}
+
+#top-edit {
+    display: flex;
+    border-bottom: 2px solid var(--accents);
+}
+
+#edit-info {
+    margin-top: 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    color: white;
+}
+
+#edit-info select {
+    background-color: var(--surface);
+    outline: none;
+    border: 2px solid var(--accents);
+    font-family: 'josefin';
+    padding: 6px;
+    border-radius: 8px;
+}
+
+#edit-info button {
+    background-color: var(--surface);
+    border: 2px solid var(--accents);
+    padding: 6px;
+    border-radius: 8px;
+}
+
+#edit-info #area-present-to-nfw-or-exc {
+    display: none;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.reason-form {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.inputfilephoto {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    background-color: var(--surface);
+    padding: 6px;
+    border-radius: 8px;
+    border: 2px dashed var(--accents);
+}
+
+.reason-form textarea {
+    padding: 12px;
+    background-color: var(--surface);
+    max-height: 125px;
+    outline: none;
+    border: 2px solid var(--accents);
+    color: var(--base);
+    border-radius: 12px;
 }
